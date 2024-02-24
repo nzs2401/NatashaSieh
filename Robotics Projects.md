@@ -30,12 +30,13 @@ Robotics 3
 
 
   Gearbox Design
-  - Used to measure torque and effiecieny of gearboxes with relation to gear ratios
+  - Used to measure torque and efficiency of gearboxes with relation to gear ratios
 ![IMG_0485](https://github.com/nzs2401/NatashaSieh/assets/116852829/6266e9a2-2dd5-4fa6-a868-54cec421087f)
 
 
-  ESP32 & BLDC Motor used to control my Gearbox design
-  - Created a HTML page to update and view the speed of the BLDC motor and project it onto an ESP32.
+  ESC, ESP32, & BLDC Motor used to control my Gearbox design
+  - Programmed ESP32 to display the speed of the BLDC motor
+  - Created a HTML interface with a slider to control and view the speed of the BLDC motor and project it onto an ESP32.
 ![IMG_D4E57DB13242-1](https://github.com/nzs2401/NatashaSieh/assets/116852829/89320a4b-0e3d-446b-b101-06ccfa04ef2d)
 
 ____________________________________________________________________________________________________________
