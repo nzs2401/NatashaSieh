@@ -1,7 +1,5 @@
 I was part of the mechanical & electrical team for my club, working on Design and Integration.
 
-Drilling a hole to match a certain size of screw:
-![IMG_0943](https://github.com/nzs2401/NatashaSieh/assets/116852829/186d9dcd-474f-4441-8bb6-9abaa295659b)
  Constructed the robot's railing system
 ![PHOTO-2024-02-24-09-31-51](https://github.com/nzs2401/NatashaSieh/assets/116852829/2ec1cf5a-533f-47b0-9c13-b89c075f362d)
 
