@@ -12,6 +12,11 @@ Integrated and soldered limit switches to the railing system to make movement of
 Worked on constructing the robots' swerve pods
 ![33a9dbf8-f97f-49c4-87f0-9a3f88a9fac4](https://github.com/nzs2401/NatashaSieh/assets/116852829/604dca5d-49c3-4048-bf30-2deafea38b48)
 
+Worked on organizing the wiring and electrical components of the robot.
+Before: ![IMG_0289](https://github.com/nzs2401/NatashaSieh/assets/116852829/d50656b6-8603-49d8-baab-ecd7ef6b93fd)
+After: ![IMG_0287](https://github.com/nzs2401/NatashaSieh/assets/116852829/75d3985d-66e5-49e1-a417-d1a236e20f9e)
+
+
 Final construction of the robot
 ![PHOTO-2024robot](https://github.com/nzs2401/NatashaSieh/assets/116852829/19d82743-8d5b-4b8f-ae5f-0e26a1777ee0)
 
