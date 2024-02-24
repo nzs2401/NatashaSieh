@@ -41,7 +41,7 @@ Robotics 3
 ____________________________________________________________________________________________________________
 
   Lidar & Raspberry Pi
-  - Coded in different operating systems, while using Lidar to work autonomously with a robot dog and a camera.
+  - Coded in different operating systems, while using Lidar to map out the environemt and work autonomously with a robot dog and a camera.
 ![IMG_0961 2](https://github.com/nzs2401/NatashaSieh/assets/116852829/0b2b5edc-9c15-4ef7-9992-204816acd9dd)
 
 ____________________________________________________________________________________________________________
