@@ -5,7 +5,7 @@ ________________________________________________________________________________
 Robotics 1
 
   Knee Project
-  - I made a model of a knee that is controlled by a servo which is programmed by a potentiometer to move the servo
+  - I made a 3D model of a bending knee joint. The servo, controlled by a potentiometer, creates the bending motion. The rubber tube ligaments are used to limit the range of motion.
   - Electronics included: servo motor, potentiometer, and Arduino Uno
 ![IMG_8928](https://github.com/nzs2401/NatashaSieh/assets/116852829/667d3b5a-b089-4d6b-a870-40098bd894fa)
 ![IMG_8930](https://github.com/nzs2401/NatashaSieh/assets/116852829/7bf0b93f-4242-43ca-871f-c3b7eb558c68)
