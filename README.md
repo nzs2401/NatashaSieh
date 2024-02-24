@@ -1,5 +1,5 @@
 # NatashaSieh
-These are projects that I have worked on!!!
+These are some projects that I have worked on!!!
 
 ___________________________________________________________________________________________________________
 Robotics 1
