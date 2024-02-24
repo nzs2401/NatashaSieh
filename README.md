@@ -16,7 +16,7 @@ Robotics 2
 
   Hotwheel Carousel
   - Built, designed, and coded a carousel used to transport hotwheel cars to different tracks powered by a brushless motor and other electronics.
-  - Electronics included: brushless motor, potentiometer, Arduino Nano, and a Liquid-crystal display (LCD)
+  - Electronics included: stepper motor, potentiometer, Arduino Nano, and a Liquid-crystal display (LCD)
 ![IMG_9991](https://github.com/nzs2401/NatashaSieh/assets/116852829/6af27fbb-3728-4e12-86d9-6606575f77b2)
 
 ____________________________________________________________________________________________________________
