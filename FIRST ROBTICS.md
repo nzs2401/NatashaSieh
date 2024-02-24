@@ -6,6 +6,7 @@ I was part of the mechanical & electrical team for my club, working on Design an
  Worked on the frame of the robot, tapping holes to fit screws and making T-slabs to connect the four sides to one.
 Fitting the plates together:
 ![PHOTO-2024-02-24-09-31-52](https://github.com/nzs2401/NatashaSieh/assets/116852829/2f78c93c-677a-41648470-e086ebd20ad8)
+
 Drilling a hole to match a certain size of screw:
 ![IMG_0943](https://github.com/nzs2401/NatashaSieh/assets/116852829/3826c799-cef1-40e4-8f77-1fab036a17d1)
 
