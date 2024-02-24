@@ -40,3 +40,12 @@ Robotics 3
 
 ____________________________________________________________________________________________________________
 
+  Lidar & Raspberry Pi
+  - Coded in different operating systems, while using Lidar to work autonomously with a robot dog and a camera.
+![IMG_0961 2](https://github.com/nzs2401/NatashaSieh/assets/116852829/0b2b5edc-9c15-4ef7-9992-204816acd9dd)
+
+____________________________________________________________________________________________________________
+
+  Evoydyne Robotics
+    - Build and programmed a robot dog to perform tricks like trot, sit, strot and more.
+![IMG_9579](https://github.com/nzs2401/NatashaSieh/assets/116852829/be527347-5750-4eff-b451-d75f98652b06)
