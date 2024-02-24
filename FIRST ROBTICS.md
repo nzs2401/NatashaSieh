@@ -7,4 +7,4 @@ I was part of the mechanical team for my club.
 ![PHOTO-2024-02-24-09-31-52](https://github.com/nzs2401/NatashaSieh/assets/116852829/2f78c93c-677a-4164-8470-e086ebd20ad8)
 
 Integrated and soldered limit switches to the railing system to make movement of the rail more precise.
-![IMG_0961 2](https://github.com/nzs2401/NatashaSieh/assets/116852829/58bffd1f-a86f-4c69-837a-6c501415573d)
+![PHOTO-2024-rail](https://github.com/nzs2401/NatashaSieh/assets/116852829/6cbea959-14a9-43e8-93be-2d0b07901191)
