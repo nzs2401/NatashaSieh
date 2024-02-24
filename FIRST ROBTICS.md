@@ -8,3 +8,6 @@ I was part of the mechanical team for my club.
 
 Integrated and soldered limit switches to the railing system to make movement of the rail more precise.
 ![PHOTO-2024-rail](https://github.com/nzs2401/NatashaSieh/assets/116852829/6cbea959-14a9-43e8-93be-2d0b07901191)
+
+Final construction of the robot
+![PHOTO-2024robot](https://github.com/nzs2401/NatashaSieh/assets/116852829/19d82743-8d5b-4b8f-ae5f-0e26a1777ee0)
