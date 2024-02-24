@@ -14,10 +14,10 @@ Worked on constructing the robots' swerve pods
 ![33a9dbf8-f97f-49c4-87f0-9a3f88a9fac4](https://github.com/nzs2401/NatashaSieh/assets/116852829/604dca5d-49c3-4048-bf30-2deafea38b48)
 
 Drilling a hole to match a certain size of screw:
-![IMG_0943](https://github.com/nzs2401/NatashaSieh/assets/116852829/6030aace-b02b-42b3-b788-1cb85fef1374)
-
+![PHOTO-2024-02-24-09-31-60](https://github.com/nzs2401/NatashaSieh/assets/116852829/0ff4b5a7-4e25-4489-adc6-7f07aae03bad)
 
 Worked on organizing the wiring and electrical components of the robot.
+
 Before: 
 ![IMG_0287](https://github.com/nzs2401/NatashaSieh/assets/116852829/75d3985d-66e5-49e1-a417-d1a236e20f9e)
 After: 
