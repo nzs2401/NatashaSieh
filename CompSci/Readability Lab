@@ -1,0 +1,104 @@
+// Natasha Sieh
+// 1/5/22
+// Period 4
+// Readability Lab
+
+// library for get_functions
+#include <cs50.h>
+// library for printf
+#include <stdio.h>
+// library for string to ... (atof...)
+#include <stdlib.h>
+// library for strings
+#include <string.h>
+// library for checking upper or lower case
+#include <ctype.h>
+// library for rounding function
+#include <math.h>
+
+// declaring 3 functions
+int count_letters(string text);
+int count_words(string text);
+int count_sentence(string text);
+
+int count_letters(string text)
+{
+    int countLetters = 0;
+    for (int i = 0; i < strlen(text); i++)
+    {
+        // if statement for counting letters in the input
+        if (isalpha(text[i]) || isupper(text[i]) || islower(text[i]) || isalnum(text[i]))
+        {
+            countLetters++;
+        }
+    }
+    //printf("Letters: %i\n", countLetters);
+    return countLetters;
+}
+
+int count_words(string text)
+{
+    float countWords = 1; // set count to 1 because the first word the user types counts as one
+    for (int j = 0; j < strlen(text); j++)
+    {
+        // if statement for checking if there is a space
+        if (isspace(text[j]))
+        {
+            countWords++;
+        }
+    }
+    //printf("Words: %i\n", countWords);
+    return countWords;
+}
+
+int count_sentence(string text)
+{
+    int countSentence = 0;
+    for (int k = 0; k < strlen(text); k++)
+    {
+        // if statement for counting these punctuations to consider how many senteces there are
+        if (text[k] == '.' || text[k] == '?' || text[k] == '!')
+        {
+            countSentence++;
+        }
+    }
+    //printf("Sentences: %i\n", countSentence);
+    return countSentence;
+}
+
+int main(void)
+{
+    // defining variables
+    string text = get_string("Text: ");
+    float letter;
+    int word;
+    float sentence;
+    float L;
+    float S;
+    float gradeLetter;
+    float index;
+    // calling functions
+    letter = count_letters(text);
+    word = count_words(text);
+    sentence = count_sentence(text);
+    // math operations for each variable
+    L = (letter / (float) word) * 100;
+    S = (sentence / (float) word) * 100;
+    // The Coleman-Liau index
+    gradeLetter = round(0.0588 * L - 0.296 * S - 15.8);
+    // if statement for if the number is less than 1
+    if (gradeLetter < 1)
+    {
+        printf("Before Grade 1\n");
+    }
+    // if else statement for if the number is greater than or equal to 16
+    else if (gradeLetter >= 16)
+    {
+        printf("Grade 16+\n");
+    }
+    // else if statement for if the number is between 0 and 16
+    else if (gradeLetter > 0 && gradeLetter < 16)
+    {
+        printf("Grade %0.0f\n", gradeLetter);
+    }
+}
