@@ -60,6 +60,7 @@ Michigan Robotics
 Classwork:
   ROB101 - Computational Linear Algebra (IA Grader Position)
   ROB102 - Intro to AI & Programming
+  [video] (/Users/natashasieh/Desktop/NatashaSieh/robot_maze.mp4)
   ROB103 - Robotics Mechanisms
   ROB204 - Introduction to Human-Robot Systems
 
