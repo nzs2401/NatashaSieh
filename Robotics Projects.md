@@ -60,7 +60,7 @@ Michigan Robotics
 Classwork:
   ROB101 - Computational Linear Algebra (IA Grader Position)
   ROB102 - Intro to AI & Programming
-  [video] (robot_maze.mp4)
+    Drive through maze with optimal path planning: https://drive.google.com/file/d/1Kt3RmbaJuCGHecA-BCh3zz6Op4S58rrp/view?usp=sharing
   ROB103 - Robotics Mechanisms
   ROB204 - Introduction to Human-Robot Systems
 
