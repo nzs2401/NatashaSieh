@@ -55,7 +55,7 @@ ________________________________________________________________________________
 ![IMG_9579](https://github.com/nzs2401/NatashaSieh/assets/116852829/be527347-5750-4eff-b451-d75f98652b06)
 
 ____________________________________________________________________________________________________________
-Michigan Robotics
+Michigan Robotics  <br>
 
 Classwork: <br>
   ROB101 - Computational Linear Algebra (IA Grader Position) <br>
@@ -66,27 +66,20 @@ Classwork: <br>
 
 Clubs/projects: <br>
   Autonomous Robotic Vechicle (ARV)
-    -  Enhancing robot perception by integrating layered ROS2 and computer vision for real-time interaction.
-    - Developing and implementing sensors and navigation solutions for autonomous systems, improving robot responsiveness and
-      subsystems coordination (LiDAR and RGB camera).
-    - Enabling communication in autonomous mode by creating nodes and subscribers in ROS2 environment.
-    - Writing an algorithm for A* for autonomous navigation during competition.
+    -  Enhancing robot perception by integrating layered ROS2 and computer vision for real-time interaction.  <br>
+    - Developing and implementing sensors and navigation solutions for autonomous systems, improving robot responsiveness and subsystems coordination (LiDAR and RGB camera).  <br>
+    - Enabling communication in autonomous mode by creating nodes and subscribers in ROS2 environment.  <br>
+    - Writing an algorithm for A* for autonomous navigation during competition.  <br>
 
 Undergraduate Research: <br>
-  Prof. Joseph Potkay’s Extracorporeal Life Support Lab
-    - Working on compact artificial lung for end-stage COPD patients. Contributing to the design, testing, and prototyping of 3D printed
-      microfluidic lung using Rolled-to-Rolled technology.
-    - Programming embedded systems and testing of electronic designs; resolving issues in prototyping equipment and creating a closed
-      loop heating system for centrifuge tests.
+  Prof. Joseph Potkay’s Extracorporeal Life Support Lab  <br>
+    - Working on compact artificial lung for end-stage COPD patients. Contributing to the design, testing, and prototyping of 3D printed microfluidic lung using Rolled-to-Rolled technology.  <br> 
+    - Programming embedded systems and testing of electronic designs; resolving issues in prototyping equipment and creating a closed loop heating system for centrifuge tests.  <br>
 
 
 SKILLS: <br>
-• Programming: Python (AI/Numpy), OpenCV, Tensorflow, ROS2, C/C++, YOLO, PyTorch, CNNs, Java, Julia, JavaScript,
-HTML/CSS.
-• Robotics & Controls: LiDAR, SLAM, ROS2, Linux, control algorithms, kinematics, robot odometry, image processing,
-embedded systems, troubleshooting, point cloud library, breadth for search, Bang-bang control, p-control, Bug Navigation.
-• Electronics & Prototyping: CAD (SolidWorks/OnShape), 3D-printing, soldering, Arduino/Raspberry Pi, centrifuge, Roll-to-
-Roll machine, motors: BLDC, stepper, & servo, neomotors, Arduino Uno/Nano/Leonardo, ESP32, ESC, Limit switches, Signal
-Generators, Spectrum Analyzers, Hardware systems integration.
-• Project Mgmt: Version control (Github), scoping, documentation, & cross-functional collaboration.
+• Programming: Python (AI/Numpy), OpenCV, Tensorflow, ROS2, C/C++, YOLO, PyTorch, CNNs, Java, Julia, JavaScript, HTML/CSS.  <br>
+• Robotics & Controls: LiDAR, SLAM, ROS2, Linux, control algorithms, kinematics, robot odometry, image processing, embedded systems, troubleshooting, point cloud library, breadth for search, Bang-bang control, p-control, Bug Navigation.  <br>
+• Electronics & Prototyping: CAD (SolidWorks/OnShape), 3D-printing, soldering, Arduino/Raspberry Pi, centrifuge, Roll-to-Roll machine, motors: BLDC, stepper, & servo, neomotors, Arduino Uno/Nano/Leonardo, ESP32, ESC, Limit switches, Signal Generators, Spectrum Analyzers, Hardware systems integration.  <br>
+• Project Mgmt: Version control (Github), scoping, documentation, & cross-functional collaboration.  <br>
 
