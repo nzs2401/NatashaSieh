@@ -1,4 +1,7 @@
 # NatashaSieh
+
+Linkedin: https://www.linkedin.com/in/natashasieh/
+
 These are some projects that I have worked on!!!
 
 ___________________________________________________________________________________________________________
@@ -50,3 +53,39 @@ ________________________________________________________________________________
   Evoydyne Robotics
     - Build and programmed a robot dog to perform tricks like trot, sit, strot and more.
 ![IMG_9579](https://github.com/nzs2401/NatashaSieh/assets/116852829/be527347-5750-4eff-b451-d75f98652b06)
+
+____________________________________________________________________________________________________________
+Michigan Robotics
+
+Classwork:
+  ROB101 - Computational Linear Algebra (IA Grader Position)
+  ROB102 - Intro to AI & Programming
+  ROB103 - Robotics Mechanisms
+  ROB204 - Introduction to Human-Robot Systems
+
+Clubs/projects:
+  Autonomous Robotic Vechicle (ARV)
+    -  Enhancing robot perception by integrating layered ROS2 and computer vision for real-time interaction.
+    - Developing and implementing sensors and navigation solutions for autonomous systems, improving robot responsiveness and
+      subsystems coordination (LiDAR and RGB camera).
+    - Enabling communication in autonomous mode by creating nodes and subscribers in ROS2 environment.
+    - Writing an algorithm for A* for autonomous navigation during competition.
+
+Undergraduate Research:
+  Prof. Joseph Potkay’s Extracorporeal Life Support Lab
+    - Working on compact artificial lung for end-stage COPD patients. Contributing to the design, testing, and prototyping of 3D printed
+      microfluidic lung using Rolled-to-Rolled technology.
+    - Programming embedded systems and testing of electronic designs; resolving issues in prototyping equipment and creating a closed
+      loop heating system for centrifuge tests.
+
+
+SKILLS:
+• Programming: Python (AI/Numpy), OpenCV, Tensorflow, ROS2, C/C++, YOLO, PyTorch, CNNs, Java, Julia, JavaScript,
+HTML/CSS.
+• Robotics & Controls: LiDAR, SLAM, ROS2, Linux, control algorithms, kinematics, robot odometry, image processing,
+embedded systems, troubleshooting, point cloud library, breadth for search, Bang-bang control, p-control, Bug Navigation.
+• Electronics & Prototyping: CAD (SolidWorks/OnShape), 3D-printing, soldering, Arduino/Raspberry Pi, centrifuge, Roll-to-
+Roll machine, motors: BLDC, stepper, & servo, neomotors, Arduino Uno/Nano/Leonardo, ESP32, ESC, Limit switches, Signal
+Generators, Spectrum Analyzers, Hardware systems integration.
+• Project Mgmt: Version control (Github), scoping, documentation, & cross-functional collaboration.
+
