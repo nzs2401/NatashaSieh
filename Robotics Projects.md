@@ -57,14 +57,14 @@ ________________________________________________________________________________
 ____________________________________________________________________________________________________________
 Michigan Robotics
 
-Classwork:
+Classwork: <br>
   ROB101 - Computational Linear Algebra (IA Grader Position) <br>
-  ROB102 - Intro to AI & Programming
-    Drive through maze with optimal path planning: https://drive.google.com/file/d/1Kt3RmbaJuCGHecA-BCh3zz6Op4S58rrp/view?usp=sharing
-  ROB103 - Robotics Mechanisms
-  ROB204 - Introduction to Human-Robot Systems
+  ROB102 - Intro to AI & Programming <br>
+    Drive through maze with optimal path planning: https://drive.google.com/file/d/1Kt3RmbaJuCGHecA-BCh3zz6Op4S58rrp/view?usp=sharing <br>
+  ROB103 - Robotics Mechanisms <br>
+  ROB204 - Introduction to Human-Robot Systems <br>
 
-Clubs/projects:
+Clubs/projects: <br>
   Autonomous Robotic Vechicle (ARV)
     -  Enhancing robot perception by integrating layered ROS2 and computer vision for real-time interaction.
     - Developing and implementing sensors and navigation solutions for autonomous systems, improving robot responsiveness and
@@ -72,7 +72,7 @@ Clubs/projects:
     - Enabling communication in autonomous mode by creating nodes and subscribers in ROS2 environment.
     - Writing an algorithm for A* for autonomous navigation during competition.
 
-Undergraduate Research:
+Undergraduate Research: <br>
   Prof. Joseph Potkay’s Extracorporeal Life Support Lab
     - Working on compact artificial lung for end-stage COPD patients. Contributing to the design, testing, and prototyping of 3D printed
       microfluidic lung using Rolled-to-Rolled technology.
@@ -80,7 +80,7 @@ Undergraduate Research:
       loop heating system for centrifuge tests.
 
 
-SKILLS:
+SKILLS: <br>
 • Programming: Python (AI/Numpy), OpenCV, Tensorflow, ROS2, C/C++, YOLO, PyTorch, CNNs, Java, Julia, JavaScript,
 HTML/CSS.
 • Robotics & Controls: LiDAR, SLAM, ROS2, Linux, control algorithms, kinematics, robot odometry, image processing,
