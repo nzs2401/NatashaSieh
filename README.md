@@ -3,6 +3,42 @@
 Linkedin: https://www.linkedin.com/in/natashasieh/
 
 These are some projects that I have worked on!!!
+---------------------------------------------------------------------------------------------------------------------------------
+Michigan Robotics  <br>
+
+Undergraduate Research Project
+- Developed GPU-accelerated side-scan sonar simulation for OceanSim, a physics-based underwater robot perception framework, leveraging NVIDIA Isaac Sim, Python,     PhysX, and custom GPU code with Warp kernels.
+- Built beam pattern generation, echo modeling, and terrain-aware acoustic imaging pipeline with real-time performance.
+- Simulated fan-shaped sonar beams and validating against real-world shipwreck data for sim-to-real accuracy.
+- Engineered ROS-to-ROS2 bridge to enhance interoperability across underwater robot simulation environments.
+- Creating procedural terrain generation pipeline with NVIDIA SDG Replicator, enabling randomized topographies.
+
+
+Classwork: <br>
+  ROB101 - Computational Linear Algebra (IA Grader Position) <br>
+  ROB102 - Intro to AI & Programming <br>
+    Drive through maze with optimal path planning: https://drive.google.com/file/d/1Kt3RmbaJuCGHecA-BCh3zz6Op4S58rrp/view?usp=sharing <br>
+  ROB103 - Robotics Mechanisms <br>
+  ROB204 - Introduction to Human-Robot Systems <br>
+
+Clubs/projects: <br>
+  Autonomous Robotic Vechicle (ARV)
+    -  Enhancing robot perception by integrating layered ROS2 and computer vision for real-time interaction.  <br>
+    - Developing and implementing sensors and navigation solutions for autonomous systems, improving robot responsiveness and subsystems coordination (LiDAR and RGB camera).  <br>
+    - Enabling communication in autonomous mode by creating nodes and subscribers in ROS2 environment.  <br>
+    - Writing an algorithm for A* for autonomous navigation during competition.  <br>
+
+Undergraduate Research: <br>
+  Prof. Joseph Potkay’s Extracorporeal Life Support Lab  <br>
+    - Working on compact artificial lung for end-stage COPD patients. Contributing to the design, testing, and prototyping of 3D printed microfluidic lung using Rolled-to-Rolled technology.  <br> 
+    - Programming embedded systems and testing of electronic designs; resolving issues in prototyping equipment and creating a closed loop heating system for centrifuge tests.  <br>
+
+
+SKILLS: <br>
+• Programming: Python (AI/Numpy), OpenCV, Tensorflow, ROS2, C/C++, YOLO, PyTorch, CNNs, Java, Julia, JavaScript, HTML/CSS.  <br>
+• Robotics & Controls: LiDAR, SLAM, ROS2, Linux, control algorithms, kinematics, robot odometry, image processing, embedded systems, troubleshooting, point cloud library, breadth for search, Bang-bang control, p-control, Bug Navigation.  <br>
+• Electronics & Prototyping: CAD (SolidWorks/OnShape), 3D-printing, soldering, Arduino/Raspberry Pi, centrifuge, Roll-to-Roll machine, motors: BLDC, stepper, & servo, neomotors, Arduino Uno/Nano/Leonardo, ESP32, ESC, Limit switches, Signal Generators, Spectrum Analyzers, Hardware systems integration.  <br>
+• Project Mgmt: Version control (Github), scoping, documentation, & cross-functional collaboration.  <br>
 
 ___________________________________________________________________________________________________________
 Robotics 1
@@ -55,31 +91,5 @@ ________________________________________________________________________________
 ![IMG_9579](https://github.com/nzs2401/NatashaSieh/assets/116852829/be527347-5750-4eff-b451-d75f98652b06)
 
 ____________________________________________________________________________________________________________
-Michigan Robotics  <br>
 
-Classwork: <br>
-  ROB101 - Computational Linear Algebra (IA Grader Position) <br>
-  ROB102 - Intro to AI & Programming <br>
-    Drive through maze with optimal path planning: https://drive.google.com/file/d/1Kt3RmbaJuCGHecA-BCh3zz6Op4S58rrp/view?usp=sharing <br>
-  ROB103 - Robotics Mechanisms <br>
-  ROB204 - Introduction to Human-Robot Systems <br>
-
-Clubs/projects: <br>
-  Autonomous Robotic Vechicle (ARV)
-    -  Enhancing robot perception by integrating layered ROS2 and computer vision for real-time interaction.  <br>
-    - Developing and implementing sensors and navigation solutions for autonomous systems, improving robot responsiveness and subsystems coordination (LiDAR and RGB camera).  <br>
-    - Enabling communication in autonomous mode by creating nodes and subscribers in ROS2 environment.  <br>
-    - Writing an algorithm for A* for autonomous navigation during competition.  <br>
-
-Undergraduate Research: <br>
-  Prof. Joseph Potkay’s Extracorporeal Life Support Lab  <br>
-    - Working on compact artificial lung for end-stage COPD patients. Contributing to the design, testing, and prototyping of 3D printed microfluidic lung using Rolled-to-Rolled technology.  <br> 
-    - Programming embedded systems and testing of electronic designs; resolving issues in prototyping equipment and creating a closed loop heating system for centrifuge tests.  <br>
-
-
-SKILLS: <br>
-• Programming: Python (AI/Numpy), OpenCV, Tensorflow, ROS2, C/C++, YOLO, PyTorch, CNNs, Java, Julia, JavaScript, HTML/CSS.  <br>
-• Robotics & Controls: LiDAR, SLAM, ROS2, Linux, control algorithms, kinematics, robot odometry, image processing, embedded systems, troubleshooting, point cloud library, breadth for search, Bang-bang control, p-control, Bug Navigation.  <br>
-• Electronics & Prototyping: CAD (SolidWorks/OnShape), 3D-printing, soldering, Arduino/Raspberry Pi, centrifuge, Roll-to-Roll machine, motors: BLDC, stepper, & servo, neomotors, Arduino Uno/Nano/Leonardo, ESP32, ESC, Limit switches, Signal Generators, Spectrum Analyzers, Hardware systems integration.  <br>
-• Project Mgmt: Version control (Github), scoping, documentation, & cross-functional collaboration.  <br>
 
