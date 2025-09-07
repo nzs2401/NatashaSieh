@@ -6,6 +6,8 @@ These are some projects that I have worked on!!!
 ---------------------------------------------------------------------------------------------------------------------------------
 Michigan Robotics  <br>
 
+Currently working at the Field Robotics Group (FRoG) Lab!!!
+
 Undergraduate Research Project
 - Developed GPU-accelerated side-scan sonar simulation for OceanSim, a physics-based underwater robot perception framework, leveraging NVIDIA Isaac Sim, Python,     PhysX, and custom GPU code with Warp kernels. (https://drive.google.com/file/d/1naX7FVNVjrl2pK1C0ho7yqw9UuYxW7y8/view)
 - Built beam pattern generation, echo modeling, and terrain-aware acoustic imaging pipeline with real-time performance.
