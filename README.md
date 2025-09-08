@@ -1,6 +1,6 @@
 # NatashaSieh
 
-Linkedin: https://www.linkedin.com/in/natashasieh/
+Linkedin: www.linkedin.com/in/nsieh/
 
 These are some projects that I have worked on!!!
 ---------------------------------------------------------------------------------------------------------------------------------
