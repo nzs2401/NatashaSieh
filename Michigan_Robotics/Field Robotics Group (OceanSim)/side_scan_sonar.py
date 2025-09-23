@@ -8,6 +8,10 @@ import warp as wp
 from isaacsim.oceansim.utils.ImagingSonar_kernels import *
 from isaacsim.oceansim.sensors.ImagingSonarSensor import ImagingSonarSensor
 from scipy.spatial.transform import Rotation as R
+import cv2
+import os
+from datetime import datetime
+import json
 
 # TODO: 1. look into time varying and gain for filtering output to have less intensity in the near range
 # TODO: 2. Decrease the horizontal FOV to scan the smaller window
@@ -23,10 +27,10 @@ class SideScanSonarSensor(Camera):
                translation = None,
                render_product_path = None,
                physics_sim_view = None,
-               min_range: float = 8.0, # was 6 m
-               max_range: float = 10.0, # m
+               min_range: float = 8.0, # was 8m
+               max_range: float = 10.0, # was 10m
                range_res: float = 0.001,
-               hori_fov: float = 0.5, # 0.5 angled  (was 2.0)
+               hori_fov: float = 0.2, # 0.5 angled  (was .2)
                vert_fov: float = 90.0, # thin vertical FOV for side scan
                angular_res: float = 0.25, # deg
                hori_res: int = 300 # (# of raycast) isaac camera render product only accepts square pixel,
@@ -90,6 +94,12 @@ class SideScanSonarSensor(Camera):
        self.waterfall = wp.empty(shape=(self.waterfall_height, self.num_range_bins, 4), dtype=wp.uint8)
        self.waterfall_buffer = wp.empty_like(self.waterfall)
 
+       # create saved output directory
+       self.output_dir = None
+       self.save_individuals_scans = False
+       self.save_waterfall = False
+       self.scan_counter = 0
+       self.complete_waterfall_history = []
 
        # Init base class
        super().__init__(prim_path=prim_path,
@@ -162,7 +172,7 @@ class SideScanSonarSensor(Camera):
 
 
    def side_sonar_initialize(self,
-                        normalizing_method: str = "range",
+                        normalizing_method: str = "all",
                         viewport: bool = True,
                         privileged_bbox: bool = False,
                         include_unlabelled = False,
@@ -514,8 +524,7 @@ class SideScanSonarSensor(Camera):
                self.side_sonar_data
            ]
            )
-       
-       np.save("/home/nsieh/Desktop/before_bin_sum.npy",arr=self.bin_sum.numpy())
+    
        
        # Create output array with same shape as bin_sum
        self.out_array = wp.empty(self.bin_count.shape[0], dtype=wp.float32)
@@ -523,6 +532,10 @@ class SideScanSonarSensor(Camera):
        wp.launch(kernel=normalize_bin,
                 dim=self.bin_sum.shape[0],
                 inputs=[self.bin_sum, self.bin_count,self.out_array])
+
+       np.save("/home/nsieh/Desktop/before_bin_sum.npy",arr=self.out_array.numpy())
+       if self.output_dir is not None and self.save_individual_scans:
+           self.save_current_scan()
 
       
        # print("Intensity min/max:", intensity.numpy().min(), intensity.numpy().max())
@@ -537,6 +550,7 @@ class SideScanSonarSensor(Camera):
       
        if self._viewport:
            self.get_side_sonar_image()
+           self.save_waterfall_frame_to_history()
            # self.get_left_side_sonar_image()
            # self.get_side_semantics_image()
 
@@ -805,9 +819,122 @@ class SideScanSonarSensor(Camera):
            ui.TextureFormat.RGBA8_UNORM,             # Still assuming 4-channel, uint8, RGBA
            explicit_stride                       # Pass the calculated stride explicitly
        )
-      
 
 
+   def set_output_directory(self, output_dir: str, 
+                        save_individual: bool = True, 
+                        save_waterfall: bool = True):
+        """Set the output directory and saving preferences."""
+        self.output_dir = output_dir
+        self.save_individual_scans = save_individual
+        self.save_waterfall = save_waterfall
+        
+        os.makedirs(output_dir, exist_ok=True)
+        if save_individual:
+            os.makedirs(os.path.join(output_dir, "individual_scans"), exist_ok=True)
+        if save_waterfall:
+            os.makedirs(os.path.join(output_dir, "waterfall"), exist_ok=True)
+
+   def save_current_scan(self, metadata: dict = None):
+        """Save the current sonar scan."""
+        if self.output_dir is None:
+            print("[SSS] Warning: No output directory set.")
+            return
+            
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
+        scan_id = f"scan_{self.scan_counter:06d}_{timestamp}"
+        
+        if self.save_individual_scans and hasattr(self, 'side_sonar_image'):
+            # Save sonar image as PNG
+            sonar_img_np = self.side_sonar_image.numpy()
+            
+            # Convert to grayscale and apply colormap
+            if sonar_img_np.shape[1] == 4:  # RGBA
+                gray_img = cv2.cvtColor(sonar_img_np.reshape(-1, 1, 4), cv2.COLOR_RGBA2GRAY)
+            else:
+                gray_img = sonar_img_np
+            
+            img_path = os.path.join(self.output_dir, "individual_scans", f"{scan_id}.png")
+            cv2.imwrite(img_path, gray_img)
+            
+            # Save processed bin data
+            if hasattr(self, 'out_array'):
+                bin_path = os.path.join(self.output_dir, "individual_scans", f"{scan_id}_bins.npy")
+                np.save(bin_path, self.out_array.numpy())
+        
+        self.scan_counter += 1
+
+   def save_final_waterfall(self, filename: str = None):
+        """Save the complete waterfall display."""
+        if not self.save_waterfall or not hasattr(self, 'waterfall'):
+            return
+            
+        if filename is None:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"waterfall_complete_{timestamp}.png"
+        
+        waterfall_np = self.waterfall.numpy()
+        
+        if waterfall_np.shape[2] == 4:  # RGBA
+            waterfall_gray = cv2.cvtColor(waterfall_np, cv2.COLOR_RGBA2GRAY)
+        else:
+            waterfall_gray = waterfall_np
+        
+        waterfall_path = os.path.join(self.output_dir, "waterfall", filename)
+        cv2.imwrite(waterfall_path, waterfall_gray)
+        print(f"[SSS] Waterfall saved: {waterfall_path}")
+
+   def export_scan_data_csv(self):
+        """Export current scan data as CSV."""
+        if not hasattr(self, 'out_array') or self.output_dir is None:
+            return
+            
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        bin_data = self.out_array.numpy()
+        range_values = self.r.numpy()
+        
+        csv_path = os.path.join(self.output_dir, f"sonar_data_{timestamp}.csv")
+        with open(csv_path, 'w') as f:
+            f.write("Range_m,Intensity\n")
+            for r, intensity in zip(range_values, bin_data):
+                f.write(f"{r:.3f},{intensity:.6f}\n")
+        print(f"[SSS] CSV saved: {csv_path}")
+
+   def save_waterfall_frame_to_history(self):
+        """Store each scan line exactly as displayed."""
+        if hasattr(self, 'side_sonar_image'):
+            # Get the raw scan line data without any reshaping and cv2
+            scan_line = self.side_sonar_image.numpy()
+            self.complete_waterfall_history.append(scan_line)
+
+   def save_complete_survey_waterfall(self, filename: str = None):
+        """Save raw waterfall data as numpy array and simple image."""
+        if not self.complete_waterfall_history:
+            print("[SSS] No waterfall history stored.")
+            return
+            
+        if filename is None:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"complete_survey_waterfall_{timestamp}"
+        
+        # Stack all data
+        complete_waterfall = np.vstack(self.complete_waterfall_history)
+        
+        # Save as numpy file (no distortion possible)
+        npy_path = os.path.join(self.output_dir, "waterfall", f"{filename}.npy")
+        np.save(npy_path, complete_waterfall)
+        
+        # Save as simple grayscale image
+        if complete_waterfall.ndim == 3 and complete_waterfall.shape[2] == 4:
+            # Take just the first channel (R from RGBA) 
+            img_data = complete_waterfall[:, :, 0]
+        else:
+            img_data = complete_waterfall
+        
+        png_path = os.path.join(self.output_dir, "waterfall", f"{filename}.png")
+        cv2.imwrite(png_path, img_data)
+        
+        print(f"[SSS] Raw waterfall saved: {npy_path} and {png_path}")
 
 
    def get_range(self) -> list[float]:

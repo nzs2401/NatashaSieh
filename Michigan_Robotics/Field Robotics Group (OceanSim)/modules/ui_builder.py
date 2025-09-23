@@ -348,6 +348,8 @@ class UIBuilder:
         #                         hori_res=50,
         #                         )
 
+
+
     # def _setup_scene(self):
     #     """
     #     This function is attached to the Load Button as the setup_scene_fn callback.
@@ -444,6 +446,8 @@ class UIBuilder:
         """
         self._reset_scenario()
 
+        self._right_side_sonar.set_output_directory("/home/nsieh/Desktop/sonar_output")
+
         # UI management
         self._scenario_state_btn.reset()
         self._scenario_state_btn.enabled = True
@@ -506,6 +510,12 @@ class UIBuilder:
         this example prettier, but if curious, the user should observe what happens when this line is removed.
         """
         self._timeline.pause()
+        if self._right_side_sonar:
+            self._right_side_sonar.save_final_waterfall()
+            self._right_side_sonar.save_waterfall_frame_to_history()
+            self._right_side_sonar.export_scan_data_csv()
+            print("[UI] Sonar data saved!")
+
 
     def _reset_extension(self):
         """This is called when the user opens a new stage from self.on_stage_event().
@@ -518,3 +528,4 @@ class UIBuilder:
         self._scenario_state_btn.reset()
         self._scenario_state_btn.enabled = False
         self._reset_btn.enabled = False
+
