@@ -2,29 +2,30 @@
 
 Linkedin: www.linkedin.com/in/nsieh/
 
-Robotics Engineering Student | University of Michigan --------------------------------------------------------------------------------------------------------------------
-Michigan Robotics  <br>
+Robotics Engineering Student | University of Michigan -------------------------------------------------------------------------------------
 
-About Me
+About Me <br>
 I'm a second-year Robotics Engineering student at the University of Michigan with research experience in GPU-accelerated robotics simulation, autonomous navigation, and embedded systems. My work spans underwater robot perception, computer vision, and real-time control systems.
 Current Focus: GPU-based sonar simulation using NVIDIA Isaac Sim, CUDA, and Warp kernels for underwater robotics research at the Field Robotics Group (FRoG) Lab.
 
+-------------------------------------------------------------------------------------
 
-Research & Technical Experience
+Research & Technical Experience <br>
 GPU-Accelerated Sonar Simulation | Field Robotics Group (FRoG Lab)
 University of Michigan | Aug 2025 - Present
 Developing high-fidelity side-scan sonar simulation for underwater robotics using NVIDIA Isaac Sim and GPU computing.
 (https://drive.google.com/file/d/1naX7FVNVjrl2pK1C0ho7yqw9UuYxW7y8/view)
-- Built GPU-accelerated acoustic imaging pipeline with CUDA/Warp kernels for real-time performance
-- Designed terrain-aware echo modeling and beam pattern generation using PhysX and Python
-- Created procedural underwater terrain generator with NVIDIA SDG Replicator for synthetic dataset creation
-- Validated simulation accuracy against real-world shipwreck sonar data
-- Engineered ROS-to-ROS2 bridge for cross-platform interoperability
+• Built GPU-accelerated acoustic imaging pipeline with CUDA/Warp kernels for real-time performance
+• Designed terrain-aware echo modeling and beam pattern generation using PhysX and Python
+• Created procedural underwater terrain generator with NVIDIA SDG Replicator for synthetic dataset creation
+• Validated simulation accuracy against real-world shipwreck sonar data
+• Engineered ROS-to-ROS2 bridge for cross-platform interoperability
 
 Tech Stack: NVIDIA Isaac Sim, CUDA, Warp, Python, PhysX, ROS2, USD
 
+-------------------------------------------------------------------------------------
 
-Autonomous Navigation | UMARV Robotics Competition Team
+Autonomous Navigation | UMARV Robotics Competition Team <br>
 University of Michigan | Sept 2024 - Present
 Navigation Engineer for autonomous ground vehicle competing in IGVC (Intelligent Ground Vehicle Competition).
 
@@ -35,7 +36,9 @@ Achieved finalist status at 32nd IGVC competition
 
 Tech Stack: ROS2, Python, C++, LiDAR, OpenCV, Point Cloud Library, SLAM
 
-Embedded Systems & Biomedical Robotics | Extracorporeal Life Support Lab
+-------------------------------------------------------------------------------------
+
+Embedded Systems & Biomedical Robotics | Extracorporeal Life Support Lab <br>
 University of Michigan | Sept 2024 - Apr 2025
 Contributed to artificial lung development for COPD patients.
 
@@ -44,6 +47,8 @@ Integrated sensors and actuators for real-time biomedical prototyping
 Supported 3D-printed microfluidic device testing using Roll-to-Roll technology
 
 Tech Stack: C++, Arduino, Embedded Systems, Sensor Integration
+
+-------------------------------------------------------------------------------------
 
 Technical Skills <br>
 Programming & GPU Computing
