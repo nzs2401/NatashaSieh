@@ -2,7 +2,8 @@
 
 Linkedin: www.linkedin.com/in/nsieh/
 
-Robotics Engineering Student | University of Michigan -------------------------------------------------------------------------------------
+Robotics Engineering Student | University of Michigan <br>
+-------------------------------------------------------------------------------------
 
 About Me <br>
 I'm a second-year Robotics Engineering student at the University of Michigan with research experience in GPU-accelerated robotics simulation, autonomous navigation, and embedded systems. My work spans underwater robot perception, computer vision, and real-time control systems.
@@ -15,11 +16,11 @@ GPU-Accelerated Sonar Simulation | Field Robotics Group (FRoG Lab)
 University of Michigan | Aug 2025 - Present
 Developing high-fidelity side-scan sonar simulation for underwater robotics using NVIDIA Isaac Sim and GPU computing.
 (https://drive.google.com/file/d/1naX7FVNVjrl2pK1C0ho7yqw9UuYxW7y8/view)
-• Built GPU-accelerated acoustic imaging pipeline with CUDA/Warp kernels for real-time performance
-• Designed terrain-aware echo modeling and beam pattern generation using PhysX and Python
-• Created procedural underwater terrain generator with NVIDIA SDG Replicator for synthetic dataset creation
-• Validated simulation accuracy against real-world shipwreck sonar data
-• Engineered ROS-to-ROS2 bridge for cross-platform interoperability
+• Built GPU-accelerated acoustic imaging pipeline with CUDA/Warp kernels for real-time performance <br>
+• Designed terrain-aware echo modeling and beam pattern generation using PhysX and Python <br>
+• Created procedural underwater terrain generator with NVIDIA SDG Replicator for synthetic dataset creation <br>
+• Validated simulation accuracy against real-world shipwreck sonar data <br>
+• Engineered ROS-to-ROS2 bridge for cross-platform interoperability <br>
 
 Tech Stack: NVIDIA Isaac Sim, CUDA, Warp, Python, PhysX, ROS2, USD
 
