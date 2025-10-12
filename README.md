@@ -2,47 +2,71 @@
 
 Linkedin: www.linkedin.com/in/nsieh/
 
-These are some projects that I have worked on!!!
----------------------------------------------------------------------------------------------------------------------------------
+Robotics Engineering Student | University of Michigan --------------------------------------------------------------------------------------------------------------------
 Michigan Robotics  <br>
 
-Currently working at the Field Robotics Group (FRoG) Lab!!!
-
-Undergraduate Research Project
-- Developed GPU-accelerated side-scan sonar simulation for OceanSim, a physics-based underwater robot perception framework, leveraging NVIDIA Isaac Sim, Python,     PhysX, and custom GPU code with Warp kernels. (https://drive.google.com/file/d/1naX7FVNVjrl2pK1C0ho7yqw9UuYxW7y8/view)
-- Built beam pattern generation, echo modeling, and terrain-aware acoustic imaging pipeline with real-time performance.
-- Simulated fan-shaped sonar beams and validating against real-world shipwreck data for sim-to-real accuracy.
-- Engineered ROS-to-ROS2 bridge to enhance interoperability across underwater robot simulation environments.
-- Creating procedural terrain generation pipeline with NVIDIA SDG Replicator, enabling randomized topographies.
+About Me
+I'm a second-year Robotics Engineering student at the University of Michigan with research experience in GPU-accelerated robotics simulation, autonomous navigation, and embedded systems. My work spans underwater robot perception, computer vision, and real-time control systems.
+Current Focus: GPU-based sonar simulation using NVIDIA Isaac Sim, CUDA, and Warp kernels for underwater robotics research at the Field Robotics Group (FRoG) Lab.
 
 
-Classwork: <br>
-  ROB101 - Computational Linear Algebra (IA Grader Position) <br>
-  ROB102 - Intro to AI & Programming <br>
-    Drive through maze with optimal path planning: https://drive.google.com/file/d/1Kt3RmbaJuCGHecA-BCh3zz6Op4S58rrp/view?usp=sharing <br>
-  ROB103 - Robotics Mechanisms <br>
-  ROB204 - Introduction to Human-Robot Systems <br>
+Research & Technical Experience
+GPU-Accelerated Sonar Simulation | Field Robotics Group (FRoG Lab)
+University of Michigan | Aug 2025 - Present
+Developing high-fidelity side-scan sonar simulation for underwater robotics using NVIDIA Isaac Sim and GPU computing.
+(https://drive.google.com/file/d/1naX7FVNVjrl2pK1C0ho7yqw9UuYxW7y8/view)
+- Built GPU-accelerated acoustic imaging pipeline with CUDA/Warp kernels for real-time performance
+- Designed terrain-aware echo modeling and beam pattern generation using PhysX and Python
+- Created procedural underwater terrain generator with NVIDIA SDG Replicator for synthetic dataset creation
+- Validated simulation accuracy against real-world shipwreck sonar data
+- Engineered ROS-to-ROS2 bridge for cross-platform interoperability
 
-Clubs/projects: <br>
-  Autonomous Robotic Vechicle (ARV)
-    -  Enhancing robot perception by integrating layered ROS2 and computer vision for real-time interaction.  <br>
-    - Developing and implementing sensors and navigation solutions for autonomous systems, improving robot responsiveness and subsystems coordination (LiDAR and RGB camera).  <br>
-    - Enabling communication in autonomous mode by creating nodes and subscribers in ROS2 environment.  <br>
-    - Writing an algorithm for A* for autonomous navigation during competition.  <br>
-
-Undergraduate Research: <br>
-  Prof. Joseph Potkay’s Extracorporeal Life Support Lab  <br>
-    - Working on compact artificial lung for end-stage COPD patients. Contributing to the design, testing, and prototyping of 3D printed microfluidic lung using Rolled-to-Rolled technology.  <br> 
-    - Programming embedded systems and testing of electronic designs; resolving issues in prototyping equipment and creating a closed loop heating system for centrifuge tests.  <br>
+Tech Stack: NVIDIA Isaac Sim, CUDA, Warp, Python, PhysX, ROS2, USD
 
 
-SKILLS: <br>
+Autonomous Navigation | UMARV Robotics Competition Team
+University of Michigan | Sept 2024 - Present
+Navigation Engineer for autonomous ground vehicle competing in IGVC (Intelligent Ground Vehicle Competition).
+
+Developed ROS2-based perception pipeline using LiDAR and RGB-D cameras for real-time obstacle detection
+Implemented A* and BFS path planning algorithms, improving pathfinding efficiency by 50%
+Built sensor fusion system combining LiDAR, depth camera, and IMU for robust localization
+Achieved finalist status at 32nd IGVC competition
+
+Tech Stack: ROS2, Python, C++, LiDAR, OpenCV, Point Cloud Library, SLAM
+
+Embedded Systems & Biomedical Robotics | Extracorporeal Life Support Lab
+University of Michigan | Sept 2024 - Apr 2025
+Contributed to artificial lung development for COPD patients.
+
+Developed embedded temperature control systems using C++ for closed-loop regulation
+Integrated sensors and actuators for real-time biomedical prototyping
+Supported 3D-printed microfluidic device testing using Roll-to-Roll technology
+
+Tech Stack: C++, Arduino, Embedded Systems, Sensor Integration
+
+Technical Skills <br>
+Programming & GPU Computing
+Python, C++, CUDA, NVIDIA Warp, GPU Kernels, Julia, JavaScript, HTML/CSS, Git, Linux
+Robotics & Autonomy
+ROS/ROS2, SLAM, Path Planning (A*, BFS), LiDAR, Sensor Fusion, Visual Odometry, PID Control, Bang-bang Control
+AI & Computer Vision
+OpenCV, YOLO, PyTorch, CNNs, TensorFlow, Point Cloud Library, Image Processing, Object Detection
+Simulation & Perception
+NVIDIA Isaac Sim (Warp, PhysX, Replicator), Gazebo, RViz, Procedural Generation, USD
+Embedded Systems & Hardware
+Arduino (Uno/Nano/Leonardo), Raspberry Pi, ESP32, Motors (BLDC, Servo, Stepper), Soldering, ESC, Signal Generators, Spectrum Analyzers
+CAD & Prototyping
+SolidWorks, OnShape, 3D Printing, Laser Cutting, Hardware Integration
+
+
+<!-- SKILLS: <br>
 • Programming: Python (AI/Numpy), OpenCV, Tensorflow, ROS2, C/C++, YOLO, PyTorch, CNNs, Java, Julia, JavaScript, HTML/CSS.  <br>
 • Robotics & Controls: LiDAR, SLAM, ROS2, Linux, control algorithms, kinematics, robot odometry, image processing, embedded systems, troubleshooting, point cloud library, breadth for search, Bang-bang control, p-control, Bug Navigation.  <br>
 • Electronics & Prototyping: CAD (SolidWorks/OnShape), 3D-printing, soldering, Arduino/Raspberry Pi, centrifuge, Roll-to-Roll machine, motors: BLDC, stepper, & servo, neomotors, Arduino Uno/Nano/Leonardo, ESP32, ESC, Limit switches, Signal Generators, Spectrum Analyzers, Hardware systems integration.  <br>
-• Project Mgmt: Version control (Github), scoping, documentation, & cross-functional collaboration.  <br>
+• Project Mgmt: Version control (Github), scoping, documentation, & cross-functional collaboration.  <br> -->
 
-___________________________________________________________________________________________________________
+<!-- ___________________________________________________________________________________________________________
 Robotics 1
 
   Knee Project
@@ -94,4 +118,4 @@ ________________________________________________________________________________
 
 ____________________________________________________________________________________________________________
 
-
+ -->
