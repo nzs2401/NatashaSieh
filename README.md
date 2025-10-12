@@ -15,7 +15,7 @@ Research & Technical Experience <br>
 GPU-Accelerated Sonar Simulation | Field Robotics Group (FRoG Lab)
 University of Michigan | Aug 2025 - Present
 Developing high-fidelity side-scan sonar simulation for underwater robotics using NVIDIA Isaac Sim and GPU computing.
-(https://drive.google.com/file/d/1naX7FVNVjrl2pK1C0ho7yqw9UuYxW7y8/view)
+(https://drive.google.com/file/d/1naX7FVNVjrl2pK1C0ho7yqw9UuYxW7y8/view) <br>
 • Built GPU-accelerated acoustic imaging pipeline with CUDA/Warp kernels for real-time performance <br>
 • Designed terrain-aware echo modeling and beam pattern generation using PhysX and Python <br>
 • Created procedural underwater terrain generator with NVIDIA SDG Replicator for synthetic dataset creation <br>
