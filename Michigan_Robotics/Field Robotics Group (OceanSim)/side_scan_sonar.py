@@ -96,7 +96,7 @@ class SideScanSonarSensor(Camera):
 
        # create saved output directory
        self.output_dir = None
-       self.save_individuals_scans = False
+    #    self.save_individuals_scans = False
        self.save_waterfall = False
        self.scan_counter = 0
        self.complete_waterfall_history = []
@@ -253,54 +253,139 @@ class SideScanSonarSensor(Camera):
            self._compute_max_intensity = side_compute_max_intensity_range
            self._make_sonar_map = side_make_sonar_map_range
       
-
-
-
-
    def scan(self):
+    """Capture a single sonar scan frame and store the raw data.
+    
+    Returns:
+        bool: True if scan was successful (valid data received), False otherwise
+    """
+    
+    self.scan_data = {
+        "pcl": None,
+        "normals": None,
+        "semantics": None,
+        "viewTransform": None,
+        "idToLabels": None,
+    }
+    
+    try:
+        # Check if annotators are ready
+        if not hasattr(self, 'semanticSeg_annot'):
+            print(f"[{self._name}] Annotators not initialized yet")
+            return False
+        
+        # Try to get semantic data first (smallest/fastest)
+        try:
+            semantic_data = self.semanticSeg_annot.get_data()
+            if semantic_data is None or 'info' not in semantic_data:
+                return False
+            
+            idToLabels = semantic_data.get('info', {}).get('idToLabels', {})
+            if len(idToLabels) == 0:
+                return False
+                
+        except Exception as e:
+            # Silently skip - this is expected in first few frames
+            return False
+        
+        # Now try to get pointcloud data
+        try:
+            pointcloud_data = self.pointcloud_annot.get_data(device=self._device)
+            
+            if pointcloud_data is None or 'data' not in pointcloud_data:
+                return False
+            
+            pcl = pointcloud_data['data']
+            if pcl is None or pcl.shape[0] == 0:
+                return False
+            
+            # Get normals
+            normals = pointcloud_data.get('info', {}).get('pointNormals', None)
+            if normals is None:
+                return False
+            
+            # Get point semantics
+            point_semantics = pointcloud_data.get('info', {}).get('pointSemantic', None)
+            if point_semantics is None:
+                return False
+            
+        except Exception as e:
+            # Annotator not ready yet
+            return False
+        
+        # Get camera parameters
+        try:
+            camera_data = self.cameraParams_annot.get_data()
+            if camera_data is None or 'cameraViewTransform' not in camera_data:
+                return False
+            
+            viewTransform = camera_data['cameraViewTransform'].reshape(4,4).T
+            
+        except Exception as e:
+            return False
+        
+        # If we made it here, all data is valid
+        self.scan_data['pcl'] = pcl
+        self.scan_data['normals'] = normals
+        self.scan_data['semantics'] = point_semantics
+        self.scan_data['viewTransform'] = viewTransform
+        self.scan_data['idToLabels'] = idToLabels
+        
+        self.id += 1
+        return True
+        
+    except Exception as e:
+        # Unexpected error - print it
+        if self.id % 100 == 0:  # Only print occasionally to avoid spam
+            print(f"[{self._name}] Scan error (frame {self.id}): {e}")
+        self.id += 1
+        return False
 
 
-       self.scan_data = {
-       "pcl": None,
-       "normals": None,
-       "semantics": None,
-       "viewTransform": None,
-       "idToLabels": None,
-       }
+#    def scan(self):
 
 
-       """Capture a single sonar scan frame and store the raw data.
+#        self.scan_data = {
+#        "pcl": None,
+#        "normals": None,
+#        "semantics": None,
+#        "viewTransform": None,
+#        "idToLabels": None,
+#        }
+
+
+#        """Capture a single sonar scan frame and store the raw data.
   
-       Returns:
-           bool: True if scan was successful (valid data received), False otherwise
+#        Returns:
+#            bool: True if scan was successful (valid data received), False otherwise
   
-       Note:
-           - Stores pointcloud, normals, semantics, and camera transform in scan_data dict
-           - First few frames may be empty due to CUDA initialization
-           - Automatically skips frames with no detected objects
-       """
-       # Due to the time to load annotator to cuda, the first few simulation tick gives no annotation in memory.
-       # This would also reult error when no mesh within the sonar fov
-       # Ignore scan that gives empty data stream
-       if len(self.semanticSeg_annot.get_data()['info']['idToLabels']) !=0:
-           pointcloud_data = self.pointcloud_annot.get_data(device=self._device)
-           self.scan_data['pcl'] = self.pointcloud_annot.get_data(device=self._device)['data']  # shape :(1,N,3) <class 'warp.types.array'>
-           self.scan_data['normals'] = self.pointcloud_annot.get_data(device=self._device)['info']['pointNormals'] # shape :(1,N,4) <class 'warp.types.array'>
-           self.scan_data['semantics'] = self.pointcloud_annot.get_data(device=self._device)['info']['pointSemantic'] # shape: (1, N) <class 'warp.types.array'>
-           self.scan_data['viewTransform'] = self.cameraParams_annot.get_data()['cameraViewTransform'].reshape(4,4).T # 4 by 4 np.ndarray extrinsic matrix
-           self.scan_data['idToLabels'] = self.semanticSeg_annot.get_data()['info']['idToLabels'] # dict
-       else:
-           pass
+#        Note:
+#            - Stores pointcloud, normals, semantics, and camera transform in scan_data dict
+#            - First few frames may be empty due to CUDA initialization
+#            - Automatically skips frames with no detected objects
+#        """
+#        # Due to the time to load annotator to cuda, the first few simulation tick gives no annotation in memory.
+#        # This would also reult error when no mesh within the sonar fov
+#        # Ignore scan that gives empty data stream
+#        if len(self.semanticSeg_annot.get_data()['info']['idToLabels']) !=0:
+#            pointcloud_data = self.pointcloud_annot.get_data(device=self._device)
+#            self.scan_data['pcl'] = self.pointcloud_annot.get_data(device=self._device)['data']  # shape :(1,N,3) <class 'warp.types.array'>
+#            self.scan_data['normals'] = self.pointcloud_annot.get_data(device=self._device)['info']['pointNormals'] # shape :(1,N,4) <class 'warp.types.array'>
+#            self.scan_data['semantics'] = self.pointcloud_annot.get_data(device=self._device)['info']['pointSemantic'] # shape: (1, N) <class 'warp.types.array'>
+#            self.scan_data['viewTransform'] = self.cameraParams_annot.get_data()['cameraViewTransform'].reshape(4,4).T # 4 by 4 np.ndarray extrinsic matrix
+#            self.scan_data['idToLabels'] = self.semanticSeg_annot.get_data()['info']['idToLabels'] # dict
+#        else:
+#            pass
 
 
-       if self.scan_data['pcl'] is not None and self.scan_data['pcl'].shape[0] > 0:
-           # print(f"[{self._name}] Sample PCL data (first 3 points): {self.scan_data['pcl'].numpy()[:3]}")
-           self.id += 1
-           return True
-       else:
-           # print(f"[{self._name}] PCL data is empty or None.")
-           self.id += 1
-           return False
+#        if self.scan_data['pcl'] is not None and self.scan_data['pcl'].shape[0] > 0:
+#            # print(f"[{self._name}] Sample PCL data (first 3 points): {self.scan_data['pcl'].numpy()[:3]}")
+#            self.id += 1
+#            return True
+#        else:
+#            # print(f"[{self._name}] PCL data is empty or None.")
+#            self.id += 1
+#            return False
           
 
 
@@ -533,9 +618,9 @@ class SideScanSonarSensor(Camera):
                 dim=self.bin_sum.shape[0],
                 inputs=[self.bin_sum, self.bin_count,self.out_array])
 
-       np.save("/home/nsieh/Desktop/before_bin_sum.npy",arr=self.out_array.numpy())
-       if self.output_dir is not None and self.save_individual_scans:
-           self.save_current_scan()
+    #    np.save("/home/nsieh/Desktop/before_bin_sum.npy",arr=self.out_array.numpy())
+    #    if self.output_dir is not None and self.save_individual_scans:
+    #        self.save_current_scan()
 
       
        # print("Intensity min/max:", intensity.numpy().min(), intensity.numpy().max())
@@ -546,13 +631,17 @@ class SideScanSonarSensor(Camera):
 
        # side_sonar_data_np = self.side_sonar_data.numpy()
        # print("AFTER normalization (actual intensity values):", side_sonar_data_np[:, 2])   
-       # print("AFTER intensity first 100:", self.side_sonar_data.numpy()[:100])    
+       # print("AFTER intensity first 100:", self.side_sonar_data.numpy()[:100])   
+       self.get_side_sonar_image() 
       
-       if self._viewport:
-           self.get_side_sonar_image()
-           self.save_waterfall_frame_to_history()
-           # self.get_left_side_sonar_image()
-           # self.get_side_semantics_image()
+    #    if self._viewport:
+    #     #    self.get_side_sonar_image()
+    #     pass
+           
+    #        # self.get_left_side_sonar_image()
+    #        # self.get_side_semantics_image()
+
+       self.save_waterfall_frame_to_history()
 
 
        # print("[SSS] bin_sum total:", self.bin_sum.numpy().sum())
@@ -822,16 +911,16 @@ class SideScanSonarSensor(Camera):
 
 
    def set_output_directory(self, output_dir: str, 
-                        save_individual: bool = True, 
+                        # save_individual: bool = True, 
                         save_waterfall: bool = True):
         """Set the output directory and saving preferences."""
         self.output_dir = output_dir
-        self.save_individual_scans = save_individual
+        # self.save_individual_scans = save_individual
         self.save_waterfall = save_waterfall
         
         os.makedirs(output_dir, exist_ok=True)
-        if save_individual:
-            os.makedirs(os.path.join(output_dir, "individual_scans"), exist_ok=True)
+        # if save_individual:
+        #     os.makedirs(os.path.join(output_dir, "individual_scans"), exist_ok=True)
         if save_waterfall:
             os.makedirs(os.path.join(output_dir, "waterfall"), exist_ok=True)
 
@@ -844,23 +933,23 @@ class SideScanSonarSensor(Camera):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
         scan_id = f"scan_{self.scan_counter:06d}_{timestamp}"
         
-        if self.save_individual_scans and hasattr(self, 'side_sonar_image'):
-            # Save sonar image as PNG
-            sonar_img_np = self.side_sonar_image.numpy()
+        # if self.save_individual_scans and hasattr(self, 'side_sonar_image'):
+        #     # Save sonar image as PNG
+        #     sonar_img_np = self.side_sonar_image.numpy()
             
-            # Convert to grayscale and apply colormap
-            if sonar_img_np.shape[1] == 4:  # RGBA
-                gray_img = cv2.cvtColor(sonar_img_np.reshape(-1, 1, 4), cv2.COLOR_RGBA2GRAY)
-            else:
-                gray_img = sonar_img_np
+        #     # Convert to grayscale and apply colormap
+        #     if sonar_img_np.shape[1] == 4:  # RGBA
+        #         gray_img = cv2.cvtColor(sonar_img_np.reshape(-1, 1, 4), cv2.COLOR_RGBA2GRAY)
+        #     else:
+        #         gray_img = sonar_img_np
             
-            img_path = os.path.join(self.output_dir, "individual_scans", f"{scan_id}.png")
-            cv2.imwrite(img_path, gray_img)
+        #     img_path = os.path.join(self.output_dir, "individual_scans", f"{scan_id}.png")
+        #     cv2.imwrite(img_path, gray_img)
             
-            # Save processed bin data
-            if hasattr(self, 'out_array'):
-                bin_path = os.path.join(self.output_dir, "individual_scans", f"{scan_id}_bins.npy")
-                np.save(bin_path, self.out_array.numpy())
+        #     # Save processed bin data
+        #     if hasattr(self, 'out_array'):
+        #         bin_path = os.path.join(self.output_dir, "individual_scans", f"{scan_id}_bins.npy")
+        #         np.save(bin_path, self.out_array.numpy())
         
         self.scan_counter += 1
 
@@ -901,24 +990,34 @@ class SideScanSonarSensor(Camera):
         print(f"[SSS] CSV saved: {csv_path}")
 
    def save_waterfall_frame_to_history(self):
-        """Store each scan line exactly as displayed."""
-        if hasattr(self, 'side_sonar_image'):
-            # Get the raw scan line data without any reshaping and cv2
-            scan_line = self.side_sonar_image.numpy()
-            self.complete_waterfall_history.append(scan_line)
+    """Store each scan line exactly as displayed."""
+    if hasattr(self, 'side_sonar_image'):
+        # Get the raw scan line data without any reshaping and cv2
+        scan_line = self.side_sonar_image.numpy().copy()  # Add .copy() to ensure data is copied
+        self.complete_waterfall_history.append(scan_line)
+        
+        # Progress indicator
+        if len(self.complete_waterfall_history) % 100 == 0:
+            print(f"[SSS] Captured {len(self.complete_waterfall_history)} frames so far")
+    else:
+        print("[SSS] WARNING: side_sonar_image does not exist!")
 
    def save_complete_survey_waterfall(self, filename: str = None):
         """Save raw waterfall data as numpy array and simple image."""
+        print(f"[SSS] Total frames in history: {len(self.complete_waterfall_history)}")
+        
         if not self.complete_waterfall_history:
-            print("[SSS] No waterfall history stored.")
+            print("[SSS] ERROR: No waterfall history stored!")
             return
             
         if filename is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"complete_survey_waterfall_{timestamp}"
         
-        # Stack all data
-        complete_waterfall = np.vstack(self.complete_waterfall_history)
+        # Stack all data - use np.stack() or np.array() instead of np.vstack()
+        # This preserves the 2D structure of each scan line
+        complete_waterfall = np.array(self.complete_waterfall_history)  # Shape: (num_frames, num_range_bins, 4)
+        print(f"[SSS] Complete waterfall shape: {complete_waterfall.shape}")
         
         # Save as numpy file (no distortion possible)
         npy_path = os.path.join(self.output_dir, "waterfall", f"{filename}.npy")
@@ -932,9 +1031,64 @@ class SideScanSonarSensor(Camera):
             img_data = complete_waterfall
         
         png_path = os.path.join(self.output_dir, "waterfall", f"{filename}.png")
-        cv2.imwrite(png_path, img_data)
         
-        print(f"[SSS] Raw waterfall saved: {npy_path} and {png_path}")
+        # Check if image dimensions are reasonable for PNG
+        if img_data.shape[0] > 65535 or img_data.shape[1] > 65535:
+            print(f"[SSS] WARNING: Image dimensions {img_data.shape} exceed PNG limits (65535x65535)")
+            print(f"[SSS] Saving as .npy only. Use the .npy file for analysis.")
+        else:
+            cv2.imwrite(png_path, img_data)
+            print(f"[SSS] PNG saved: {png_path}")
+        
+        print(f"[SSS] Complete survey saved with {len(self.complete_waterfall_history)} frames")
+        print(f"[SSS] Raw waterfall (.npy) saved: {npy_path}")
+        
+        # *** CLEAR THE HISTORY FOR THE NEXT SCAN ***
+        self.complete_waterfall_history.clear()
+        print(f"[SSS] History cleared for next scan")
+
+# # save complete waterfall image by appending to previous ones (1 large png)
+#    def save_complete_survey_waterfall(self, filename: str = None):
+#     """Save raw waterfall data as numpy array and simple image."""
+#     print(f"[SSS] Total frames in history: {len(self.complete_waterfall_history)}")
+    
+#     if not self.complete_waterfall_history:
+#         print("[SSS] ERROR: No waterfall history stored!")
+#         return
+        
+#     if filename is None:
+#         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+#         filename = f"complete_survey_waterfall_{timestamp}"
+    
+#     # Stack all data - use np.stack() or np.array() instead of np.vstack()
+#     # This preserves the 2D structure of each scan line
+#     complete_waterfall = np.array(self.complete_waterfall_history)  # Shape: (num_frames, num_range_bins, 4)
+#     print(f"[SSS] Complete waterfall shape: {complete_waterfall.shape}")
+    
+#     # Save as numpy file (no distortion possible)
+#     npy_path = os.path.join(self.output_dir, "waterfall", f"{filename}.npy")
+#     np.save(npy_path, complete_waterfall)
+    
+#     # Save as simple grayscale image
+#     if complete_waterfall.ndim == 3 and complete_waterfall.shape[2] == 4:
+#         # Take just the first channel (R from RGBA) 
+#         img_data = complete_waterfall[:, :, 0]
+#     else:
+#         img_data = complete_waterfall
+    
+#     png_path = os.path.join(self.output_dir, "waterfall", f"{filename}.png")
+    
+#     # Check if image dimensions are reasonable for PNG
+#     if img_data.shape[0] > 65535 or img_data.shape[1] > 65535:
+#         print(f"[SSS] WARNING: Image dimensions {img_data.shape} exceed PNG limits (65535x65535)")
+#         print(f"[SSS] Saving as .npy only. Use the .npy file for analysis.")
+#     else:
+#         cv2.imwrite(png_path, img_data)
+#         print(f"[SSS] PNG saved: {png_path}")
+    
+#     print(f"[SSS] Complete survey saved with {len(self.complete_waterfall_history)} frames")
+#     print(f"[SSS] Raw waterfall (.npy) saved: {npy_path}")
+
 
 
    def get_range(self) -> list[float]:
@@ -998,3 +1152,6 @@ class SideScanSonarSensor(Camera):
        """
        for elem in self.wrapped_ui_elements:
            elem.destroy()
+
+
+

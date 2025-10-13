@@ -365,8 +365,8 @@ def side_range_dependent_rayleigh_1d(seed: int,
     rayleigh = rayleigh_scale * wp.sqrt(n1*n1 + n2*n2)
 
     # Slightly softer exponent
-    # range_factor = wp.pow(r[i] / max_range, 1.5)
-    range_factor = wp.pow(r[i] / max_range, 1.0)
+    # range_factor = wp.pow(r[i] / max_range, 1.0)
+    range_factor = wp.pow(r[i] / max_range, 0.3) # changed Oct 13
     output[i] = range_factor * rayleigh
 
 
@@ -452,9 +452,14 @@ def side_make_sonar_map_range(r: wp.array(dtype=wp.float32),
                        result: wp.array(dtype=wp.vec3)):
     i = wp.tid()
 
-    intensity[i] = intensity[i] / (max_intensity[0] + 1e-10)
-    intensity[i] *= (0.5 + gau_noise[i])
-    intensity[i] +=  range_ray_noise[i]
+    # intensity[i] = intensity[i] / (max_intensity[0] + 1e-10)
+    # intensity[i] *= (0.5 + gau_noise[i])
+    # intensity[i] += range_ray_noise[i]
+
+    intensity[i] = intensity[i] / (max_intensity[0] + 1e-6)
+    intensity[i] *= (0.9 + 0.1 + gau_noise[i])
+    # intensity[i] +=  range_ray_noise[i]
+    intensity[i] += 0.3 * range_ray_noise[i]
     intensity[i] += offset
     intensity[i] *= gain
     intensity[i] = wp.clamp(intensity[i], wp.float32(0.0), wp.float32(1.0))

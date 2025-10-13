@@ -151,10 +151,12 @@ class UIBuilder:
         self._right_sensor_location = [-0.00757, -0.09933, -0.10222] # CHANGE THIS!
         self._left_sensor_location = [-0.00757, 0.09933, -0.10222] # CHANGE THIS!
         # self._init_rob_pos = np.array([-1.76533, 1.21862, 0.50175])
-        # self._init_rob_pos = np.array([-7.65574, 5.26742, 9.50]) # CHANGE THIS! 09/07 for shipwreck
+        self._init_rob_pos = np.array([3, 7.1, 7.8]) # CHANGE THIS! 09/07 for shipwreck
 
         # self._init_rob_pos = np.array([-6.08768, 4.35035, 6.55124])
-        self._init_rob_pos = np.array([5.2596, 5.76701, 6.46096])
+        # self._init_rob_pos = np.array([5.2596, 5.76701, 6.46096]) # Oct 7
+        # self._init_rob_pos = np.array([-4.548, 7.856, 7.747])
+
         self._init_rob_orien = euler_angles_to_quat(np.array([0, 0, 0]), degrees=True)
         self._rob_mass = 10 #kg Need this value to supress a warning given by automatic mass computation from collider assignment
         self._rob_angular_damping = 10.0
@@ -234,7 +236,8 @@ class UIBuilder:
     
 
 
-    #     # self._right_side_sonar.side_sonar_initialize()
+    # self._right_side_sonar.side_sonar_initialize(normalizing_method="range")
+
     #     # self._left_side_sonar.side_sonar_initialize()
     #     # self._left_side_sonar.make_side_sonar_data()
         
@@ -512,7 +515,7 @@ class UIBuilder:
         self._timeline.pause()
         if self._right_side_sonar:
             self._right_side_sonar.save_final_waterfall()
-            self._right_side_sonar.save_waterfall_frame_to_history()
+            self._right_side_sonar.save_complete_survey_waterfall()
             self._right_side_sonar.export_scan_data_csv()
             print("[UI] Sonar data saved!")
 
