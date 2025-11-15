@@ -56,6 +56,22 @@ class TerrainParameterGenerator:
         
         # Predefined parameter sets for specific terrain types
         self.terrain_presets = {
+            ### NEW Nov 14, 3:52pm ###
+            'sand_ripples': TerrainParameters(
+                map_size=1024,
+                noise_scale=30.0,          # LARGE scale for ripple wavelength
+                octaves=3,                 # LOW octaves for smooth, regular features
+                amplitude_decay=0.7,       # Gentle decay
+                frequency_multiplier=2.0,
+                smoothing_method="gaussian", # SMOOTH for sand
+                smoothing_strength=3.5,    # High smoothing
+                random_noise_strength=0.002, # Very low noise (sand is smooth)
+                elevation_curve="smooth",  # Gentle curves
+                scale_x=100.0,
+                scale_y=100.0,
+                scale_z=0.05,              # VERY FLAT - ripples are only ~0.5m tall
+            ),
+            ### NEW Nov 14, 3:52pm ###
             'rolling_hills': TerrainParameters(
                 noise_scale=12.0, octaves=3, smoothing_method="gaussian",
                 smoothing_strength=2.0, elevation_curve="smooth"
@@ -71,7 +87,23 @@ class TerrainParameterGenerator:
             'plateau_landscape': TerrainParameters(
                 noise_scale=8.0, octaves=5, smoothing_method="median",
                 smoothing_strength=2.2, elevation_curve="plateau"
+            ),
+            # ADDED 11/2 12:25
+            'volcanic_boulder_field': TerrainParameters(  # ADD THIS
+                map_size=1024,
+                noise_scale=4.0,
+                octaves=10,
+                amplitude_decay=0.55,
+                frequency_multiplier=2.3,
+                smoothing_method="none",
+                smoothing_strength=0.0,
+                random_noise_strength=0.025,
+                elevation_curve="none",
+                scale_x=100.0,
+                scale_y=100.0,
+                scale_z=2.0
             )
+            
         }
     
     def generate_random_parameters(self, seed: int = None) -> TerrainParameters:
@@ -195,6 +227,171 @@ def generate_parametric_heightmap(params: TerrainParameters) -> np.ndarray:
     
     return heightmap
 
+def generate_volcanic_boulder_heightmap(params: TerrainParameters) -> np.ndarray:
+    """Generate volcanic boulder field terrain matching SSS reference"""
+    if params.seed is not None:
+        random.seed(params.seed)
+        np.random.seed(params.seed)
+    
+    heightmap = np.zeros((params.map_size, params.map_size))
+    
+    amplitude = 1.0
+    frequency = 1.0
+    max_value = 0.0
+    
+    # Layer 1: Base terrain with ridging for angular features
+    for i in range(params.octaves):
+        noise = PerlinNoise(octaves=1, seed=random.randint(0, 100000))
+        
+        current_scale = params.noise_scale * frequency
+        x_offset = random.uniform(-0.1, 0.1)
+        y_offset = random.uniform(-0.1, 0.1)
+        
+        x_coords, y_coords = np.meshgrid(np.arange(params.map_size), np.arange(params.map_size))
+        sample_x = (x_coords / params.map_size * current_scale) + x_offset
+        sample_y = (y_coords / params.map_size * current_scale) + y_offset
+        
+        noise_layer = np.array([noise([x, y]) for x, y in zip(sample_x.flatten(), sample_y.flatten())]).reshape(params.map_size, params.map_size)
+        
+        # Apply ridging to create sharp features
+        if i < params.octaves * 0.4:  # First 40% of octaves
+            noise_layer = 1.0 - 2.0 * np.abs(noise_layer)
+        
+        heightmap += noise_layer * amplitude
+        
+        max_value += amplitude
+        amplitude *= params.amplitude_decay
+        frequency *= params.frequency_multiplier
+    
+    # Normalize base terrain
+    heightmap /= max_value
+    
+    # Layer 2: Add "boulders" - small bumps scattered around
+    num_boulders = int(params.map_size * params.map_size * 0.02)  # 2% coverage
+    for _ in range(num_boulders):
+        x_center = random.randint(0, params.map_size - 1)
+        y_center = random.randint(0, params.map_size - 1)
+        boulder_size = random.uniform(3, 10)  # pixels
+        boulder_height = random.uniform(0.05, 0.15)  # height contribution
+        
+        # Create boulder using Gaussian
+        y_grid, x_grid = np.ogrid[:params.map_size, :params.map_size]
+        distance = np.sqrt((x_grid - x_center)**2 + (y_grid - y_center)**2)
+        boulder = boulder_height * np.exp(-(distance**2) / (2 * boulder_size**2))
+        heightmap += boulder
+    
+    # Layer 3: High-frequency noise for surface roughness
+    high_freq_noise = np.random.uniform(-0.1, 0.1, (params.map_size, params.map_size))
+    
+    # Apply noise at multiple scales to create granular texture
+    for scale in [2, 4, 8]:
+        noise_layer = np.random.uniform(-1, 1, (params.map_size // scale, params.map_size // scale))
+        noise_layer = ndimage.zoom(noise_layer, scale, order=1)
+        # Crop or pad to exact size
+        if noise_layer.shape[0] > params.map_size:
+            noise_layer = noise_layer[:params.map_size, :params.map_size]
+        high_freq_noise += noise_layer * 0.02
+    
+    heightmap += high_freq_noise * params.random_noise_strength * 3
+    
+    # Final normalization
+    heightmap = (heightmap - np.min(heightmap)) / (np.max(heightmap) - np.min(heightmap))
+    
+    return heightmap
+
+### NEW Nov 14, 3:54pm ###
+def generate_sand_ripples_heightmap(params: TerrainParameters) -> np.ndarray:
+    """Generate sand ripples using physical ripple equations"""
+    if params.seed is not None:
+        random.seed(params.seed)
+        np.random.seed(params.seed)
+    
+    heightmap = np.zeros((params.map_size, params.map_size))
+    x_coords, y_coords = np.meshgrid(np.arange(params.map_size), np.arange(params.map_size))
+    
+    # Base ripple direction with MINIMAL variation
+    base_angle = random.uniform(0, np.pi)
+    
+    # Very gentle direction variation (only at large scales)
+    direction_noise = PerlinNoise(octaves=1, seed=random.randint(0, 100000))
+    direction_scale = 0.8  # Large-scale gentle curves only
+    
+    dir_samples = np.array([direction_noise([x/params.map_size * direction_scale, 
+                                             y/params.map_size * direction_scale]) 
+                           for x, y in zip(x_coords.flatten(), y_coords.flatten())])
+    direction_field = dir_samples.reshape(params.map_size, params.map_size)
+    
+    # Minimal angle variation (0.1 radians ≈ 5.7 degrees max deviation)
+    angle_variation = direction_field * 0.1
+    local_angles = base_angle + angle_variation
+    
+    # Rotate coordinates
+    x_rot = x_coords * np.cos(local_angles) + y_coords * np.sin(local_angles)
+    
+    # PHYSICALLY BASED RIPPLE PARAMETERS
+    # Ripple Index RI = λ/(2A) typically 10-15 for current ripples
+    ripple_index = 12.0  # Mid-range value
+    wavelength = params.map_size / (params.noise_scale * 1.2)  # λ in pixels
+    amplitude = wavelength / (2.0 * ripple_index)  # A calculated from RI
+    
+    # Create base sinusoidal ripple: z(x) = A*sin(2πx/λ)
+    base_ripples = amplitude * np.sin(2 * np.pi * x_rot / wavelength)
+    
+    # Add asymmetry using Fourier harmonics (for stoss/lee asymmetry)
+    # This creates the gentle upstream side and steeper downstream side
+    asymmetry = 0.15 * amplitude * np.sin(4 * np.pi * x_rot / wavelength + np.pi/2)
+    asymmetry += 0.08 * amplitude * np.sin(6 * np.pi * x_rot / wavelength + np.pi/3)
+    
+    # Combine base ripples with asymmetry
+    ripples = base_ripples + asymmetry
+    
+    # Normalize ripples to [0, 1] range initially
+    ripples = (ripples - ripples.min()) / (ripples.max() - ripples.min())
+    
+    # Apply gentle power function to round peaks slightly
+    ripples = np.power(ripples, 0.8)
+    
+    heightmap = ripples
+    
+    # Add MINIMAL quasi-periodic variation (not random chaos)
+    # This represents natural variation in ripple spacing
+    large_scale_var = PerlinNoise(octaves=1, seed=random.randint(0, 100000))
+    var_scale = 3.0
+    
+    var_samples = np.array([large_scale_var([x/params.map_size * var_scale, 
+                                             y/params.map_size * var_scale]) 
+                           for x, y in zip(x_coords.flatten(), y_coords.flatten())])
+    variation = var_samples.reshape(params.map_size, params.map_size)
+    
+    heightmap += variation * 0.08  # Very subtle variation
+    
+    # Smooth to remove mesh artifacts and create natural sand texture
+    heightmap = ndimage.gaussian_filter(heightmap, sigma=params.smoothing_strength)
+    
+    # Add fine-scale sand grain texture
+    grain_texture = np.random.normal(0, params.random_noise_strength, heightmap.shape)
+    grain_texture = ndimage.gaussian_filter(grain_texture, sigma=0.5)
+    heightmap += grain_texture * 0.3
+    
+    # Final normalization
+    heightmap = (heightmap - np.min(heightmap)) / (np.max(heightmap) - np.min(heightmap))
+    
+    return heightmap
+
+def generate_terrain_by_preset(preset_name: str, params: TerrainParameters) -> np.ndarray:
+    """Route to the correct generation function based on preset name"""
+    
+    terrain_generators = {
+        'volcanic_boulder_field': generate_volcanic_boulder_heightmap,
+        'sand_ripples': generate_sand_ripples_heightmap,
+        # All other presets use the default generator
+    }
+    
+    # Use specialized generator if available, otherwise use default
+    generator = terrain_generators.get(preset_name, generate_parametric_heightmap)
+    return generator(params)
+### NEW Nov 14, 3:54pm ###
+
 # Example usage and testing
 if __name__ == "__main__":
     # Create parameter generator
@@ -236,12 +433,39 @@ if __name__ == "__main__":
     print(f"Saved random terrain to {output_dir}/")
     print("Parameters saved to JSON for reproducibility!")
     
-    # Generate preset terrains
-    for preset_name in ["rolling_hills", "rough_mountains"]:
-        preset_params = param_gen.get_preset_parameters(preset_name)
-        preset_heightmap = generate_parametric_heightmap(preset_params)
+    # # Generate preset terrains using the router function
+    # for preset_name in ["rolling_hills", "rough_mountains", "volcanic_boulder_field", "sand_ripples"]:  # ADDED sand_ripples
+    #     preset_params = param_gen.get_preset_parameters(preset_name)
         
-        np.save(os.path.join(output_dir, f"{preset_name}.npy"), preset_heightmap)
-        param_gen.save_parameters(preset_params, os.path.join(output_dir, f"{preset_name}_params.json"))
+    #     # USE THE ROUTER - it automatically picks the right function!
+    #     preset_heightmap = generate_terrain_by_preset(preset_name, preset_params)
         
-        print(f"Generated {preset_name} terrain")
+    #     np.save(os.path.join(output_dir, f"{preset_name}.npy"), preset_heightmap)
+    #     param_gen.save_parameters(preset_params, os.path.join(output_dir, f"{preset_name}_params.json"))
+        
+    #     print(f"Generated {preset_name} terrain")
+
+    # Generate preset terrains using the router function
+    for preset_name in ["rolling_hills", "rough_mountains", "volcanic_boulder_field", "sand_ripples"]:
+        try:
+            print(f"Generating {preset_name}...")
+            preset_params = param_gen.get_preset_parameters(preset_name)
+            
+            # USE THE ROUTER - it automatically picks the right function!
+            preset_heightmap = generate_terrain_by_preset(preset_name, preset_params)
+            
+            np.save(os.path.join(output_dir, f"{preset_name}.npy"), preset_heightmap)
+            param_gen.save_parameters(preset_params, os.path.join(output_dir, f"{preset_name}_params.json"))
+            
+            print(f"✓ Generated {preset_name} terrain")
+        except Exception as e:
+            print(f"✗ ERROR generating {preset_name}: {e}")
+            import traceback
+            traceback.print_exc()
+            continue  # Continue to next terrain even if one fails
+
+        # run: cd /home/nsieh/code/isaacsim-5.0/_build/linux-x86_64/release/ROB490
+        # run: python parametric_terrain_generator.py
+        # check: ls -lh parametric_heightmaps/
+
+
