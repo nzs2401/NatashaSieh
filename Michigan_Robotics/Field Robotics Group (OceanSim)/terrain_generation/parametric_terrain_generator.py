@@ -59,17 +59,17 @@ class TerrainParameterGenerator:
             ### NEW Nov 14, 3:52pm ###
             'sand_ripples': TerrainParameters(
                 map_size=1024,
-                noise_scale=30.0,          # LARGE scale for ripple wavelength
+                noise_scale=80.0,          # LARGE scale for ripple wavelength
                 octaves=3,                 # LOW octaves for smooth, regular features
                 amplitude_decay=0.7,       # Gentle decay
                 frequency_multiplier=2.0,
                 smoothing_method="gaussian", # SMOOTH for sand
-                smoothing_strength=3.5,    # High smoothing
-                random_noise_strength=0.002, # Very low noise (sand is smooth)
+                smoothing_strength=4.0,    # High smoothing
+                random_noise_strength=0.001, # Very low noise (sand is smooth)
                 elevation_curve="smooth",  # Gentle curves
                 scale_x=100.0,
                 scale_y=100.0,
-                scale_z=0.05,              # VERY FLAT - ripples are only ~0.5m tall
+                scale_z=0.03,              # VERY FLAT - ripples are only ~0.5m tall
             ),
             ### NEW Nov 14, 3:52pm ###
             'rolling_hills': TerrainParameters(
@@ -300,81 +300,158 @@ def generate_volcanic_boulder_heightmap(params: TerrainParameters) -> np.ndarray
     return heightmap
 
 ### NEW Nov 14, 3:54pm ###
+# def generate_sand_ripples_heightmap(params: TerrainParameters) -> np.ndarray:
+#     """Generate sand ripples using physical ripple equations"""
+#     if params.seed is not None:
+#         random.seed(params.seed)
+#         np.random.seed(params.seed)
+    
+#     heightmap = np.zeros((params.map_size, params.map_size))
+#     x_coords, y_coords = np.meshgrid(np.arange(params.map_size), np.arange(params.map_size))
+    
+#     # Base ripple direction with MINIMAL variation
+#     base_angle = random.uniform(0, np.pi)
+    
+#     # Very gentle direction variation (only at large scales)
+#     direction_noise = PerlinNoise(octaves=1, seed=random.randint(0, 100000))
+#     direction_scale = 0.8  # Large-scale gentle curves only
+    
+#     dir_samples = np.array([direction_noise([x/params.map_size * direction_scale, 
+#                                              y/params.map_size * direction_scale]) 
+#                            for x, y in zip(x_coords.flatten(), y_coords.flatten())])
+#     direction_field = dir_samples.reshape(params.map_size, params.map_size)
+    
+#     # Minimal angle variation (0.1 radians ≈ 5.7 degrees max deviation)
+#     angle_variation = direction_field * 0.1
+#     local_angles = base_angle + angle_variation
+    
+#     # Rotate coordinates
+#     x_rot = x_coords * np.cos(local_angles) + y_coords * np.sin(local_angles)
+    
+#     # PHYSICALLY BASED RIPPLE PARAMETERS
+#     # Ripple Index RI = λ/(2A) typically 10-15 for current ripples
+#     ripple_index = 12.0  # Mid-range value
+#     wavelength = params.map_size / (params.noise_scale * 1.2)  # λ in pixels
+#     amplitude = wavelength / (2.0 * ripple_index)  # A calculated from RI
+    
+#     # Create base sinusoidal ripple: z(x) = A*sin(2πx/λ)
+#     base_ripples = amplitude * np.sin(2 * np.pi * x_rot / wavelength)
+    
+#     # Add asymmetry using Fourier harmonics (for stoss/lee asymmetry)
+#     # This creates the gentle upstream side and steeper downstream side
+#     asymmetry = 0.15 * amplitude * np.sin(4 * np.pi * x_rot / wavelength + np.pi/2)
+#     asymmetry += 0.08 * amplitude * np.sin(6 * np.pi * x_rot / wavelength + np.pi/3)
+    
+#     # Combine base ripples with asymmetry
+#     ripples = base_ripples + asymmetry
+    
+#     # Normalize ripples to [0, 1] range initially
+#     ripples = (ripples - ripples.min()) / (ripples.max() - ripples.min())
+    
+#     # Apply gentle power function to round peaks slightly
+#     ripples = np.power(ripples, 0.8)
+    
+#     heightmap = ripples
+    
+#     # Add MINIMAL quasi-periodic variation (not random chaos)
+#     # This represents natural variation in ripple spacing
+#     large_scale_var = PerlinNoise(octaves=1, seed=random.randint(0, 100000))
+#     var_scale = 3.0
+    
+#     var_samples = np.array([large_scale_var([x/params.map_size * var_scale, 
+#                                              y/params.map_size * var_scale]) 
+#                            for x, y in zip(x_coords.flatten(), y_coords.flatten())])
+#     variation = var_samples.reshape(params.map_size, params.map_size)
+    
+#     heightmap += variation * 0.08  # Very subtle variation
+    
+#     # Smooth to remove mesh artifacts and create natural sand texture
+#     heightmap = ndimage.gaussian_filter(heightmap, sigma=params.smoothing_strength)
+    
+#     # Add fine-scale sand grain texture
+#     grain_texture = np.random.normal(0, params.random_noise_strength, heightmap.shape)
+#     grain_texture = ndimage.gaussian_filter(grain_texture, sigma=0.5)
+#     heightmap += grain_texture * 0.3
+    
+#     # Final normalization
+#     heightmap = (heightmap - np.min(heightmap)) / (np.max(heightmap) - np.min(heightmap))
+    
+#     return heightmap
+
+# NEW Nov 24, 12:07pm ###
 def generate_sand_ripples_heightmap(params: TerrainParameters) -> np.ndarray:
-    """Generate sand ripples using physical ripple equations"""
+    """Generate sand ripples with GUARANTEED flat base using offset"""
     if params.seed is not None:
         random.seed(params.seed)
         np.random.seed(params.seed)
     
-    heightmap = np.zeros((params.map_size, params.map_size))
     x_coords, y_coords = np.meshgrid(np.arange(params.map_size), np.arange(params.map_size))
     
-    # Base ripple direction with MINIMAL variation
+    # Ripple direction
     base_angle = random.uniform(0, np.pi)
     
-    # Very gentle direction variation (only at large scales)
     direction_noise = PerlinNoise(octaves=1, seed=random.randint(0, 100000))
-    direction_scale = 0.8  # Large-scale gentle curves only
+    direction_scale = 0.4
     
     dir_samples = np.array([direction_noise([x/params.map_size * direction_scale, 
                                              y/params.map_size * direction_scale]) 
                            for x, y in zip(x_coords.flatten(), y_coords.flatten())])
     direction_field = dir_samples.reshape(params.map_size, params.map_size)
     
-    # Minimal angle variation (0.1 radians ≈ 5.7 degrees max deviation)
-    angle_variation = direction_field * 0.1
+    angle_variation = direction_field * 0.06
     local_angles = base_angle + angle_variation
     
     # Rotate coordinates
     x_rot = x_coords * np.cos(local_angles) + y_coords * np.sin(local_angles)
     
-    # PHYSICALLY BASED RIPPLE PARAMETERS
-    # Ripple Index RI = λ/(2A) typically 10-15 for current ripples
-    ripple_index = 12.0  # Mid-range value
-    wavelength = params.map_size / (params.noise_scale * 1.2)  # λ in pixels
-    amplitude = wavelength / (2.0 * ripple_index)  # A calculated from RI
+    # Ripple wavelength
+    wavelength = params.map_size / (params.noise_scale * 1.0)
     
-    # Create base sinusoidal ripple: z(x) = A*sin(2πx/λ)
-    base_ripples = amplitude * np.sin(2 * np.pi * x_rot / wavelength)
+    # Create sine wave
+    ripple_wave = np.sin(2 * np.pi * x_rot / wavelength)
     
-    # Add asymmetry using Fourier harmonics (for stoss/lee asymmetry)
-    # This creates the gentle upstream side and steeper downstream side
-    asymmetry = 0.15 * amplitude * np.sin(4 * np.pi * x_rot / wavelength + np.pi/2)
-    asymmetry += 0.08 * amplitude * np.sin(6 * np.pi * x_rot / wavelength + np.pi/3)
+    # Map to [0, 1]
+    ripple_wave = (ripple_wave + 1.0) / 2.0
     
-    # Combine base ripples with asymmetry
-    ripples = base_ripples + asymmetry
+    # Threshold: only keep peaks
+    threshold = 0.6
+    ripple_bumps = np.where(ripple_wave > threshold,
+                           (ripple_wave - threshold) / (1.0 - threshold),
+                           0.0)
     
-    # Normalize ripples to [0, 1] range initially
-    ripples = (ripples - ripples.min()) / (ripples.max() - ripples.min())
+    # Smooth the bumps heavily
+    ripple_bumps = ndimage.gaussian_filter(ripple_bumps, sigma=4.0)
     
-    # Apply gentle power function to round peaks slightly
-    ripples = np.power(ripples, 0.8)
+    # CRITICAL FIX: Start with a RAISED baseline (not zero!)
+    BASE_HEIGHT = 0.5  # This is the flat seafloor level
+    heightmap = np.full((params.map_size, params.map_size), BASE_HEIGHT)
     
-    heightmap = ripples
+    # Add ripples ON TOP of the base (they can only increase height)
+    RIPPLE_HEIGHT = 0.3  # Maximum additional height from ripples
+    heightmap += ripple_bumps * RIPPLE_HEIGHT
     
-    # Add MINIMAL quasi-periodic variation (not random chaos)
-    # This represents natural variation in ripple spacing
-    large_scale_var = PerlinNoise(octaves=1, seed=random.randint(0, 100000))
-    var_scale = 3.0
-    
-    var_samples = np.array([large_scale_var([x/params.map_size * var_scale, 
-                                             y/params.map_size * var_scale]) 
+    # Add subtle large-scale undulation
+    large_var = PerlinNoise(octaves=1, seed=random.randint(0, 100000))
+    var_samples = np.array([large_var([x/params.map_size * 1.5, 
+                                       y/params.map_size * 1.5]) 
                            for x, y in zip(x_coords.flatten(), y_coords.flatten())])
     variation = var_samples.reshape(params.map_size, params.map_size)
     
-    heightmap += variation * 0.08  # Very subtle variation
+    # Normalize variation to small positive values
+    variation = (variation - variation.min()) / (variation.max() - variation.min())
+    heightmap += variation * 0.03
     
-    # Smooth to remove mesh artifacts and create natural sand texture
-    heightmap = ndimage.gaussian_filter(heightmap, sigma=params.smoothing_strength)
+    # Add fine sand texture
+    grain = np.random.normal(0, 0.001, heightmap.shape)
+    grain = ndimage.gaussian_filter(grain, sigma=0.3)
+    heightmap += grain
     
-    # Add fine-scale sand grain texture
-    grain_texture = np.random.normal(0, params.random_noise_strength, heightmap.shape)
-    grain_texture = ndimage.gaussian_filter(grain_texture, sigma=0.5)
-    heightmap += grain_texture * 0.3
+    # Final smoothing
+    heightmap = ndimage.gaussian_filter(heightmap, sigma=2.0)
     
-    # Final normalization
-    heightmap = (heightmap - np.min(heightmap)) / (np.max(heightmap) - np.min(heightmap))
+    # NO NORMALIZATION! Keep the absolute values
+    # The base is at 0.5, ripples extend up to ~0.8
+    # This preserves the flat regions at exactly 0.5
     
     return heightmap
 
@@ -446,7 +523,8 @@ if __name__ == "__main__":
     #     print(f"Generated {preset_name} terrain")
 
     # Generate preset terrains using the router function
-    for preset_name in ["rolling_hills", "rough_mountains", "volcanic_boulder_field", "sand_ripples"]:
+    # for preset_name in ["rolling_hills", "rough_mountains", "volcanic_boulder_field", "sand_ripples"]:
+    for preset_name in ["sand_ripples"]:
         try:
             print(f"Generating {preset_name}...")
             preset_params = param_gen.get_preset_parameters(preset_name)
