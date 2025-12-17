@@ -59,7 +59,7 @@ class TerrainParameterGenerator:
             ### NEW Nov 14, 3:52pm ###
             'sand_ripples': TerrainParameters(
                 map_size=1024,
-                noise_scale=80.0,          # LARGE scale for ripple wavelength
+                noise_scale=90.0,          # LARGE scale for ripple wavelength
                 octaves=3,                 # LOW octaves for smooth, regular features
                 amplitude_decay=0.7,       # Gentle decay
                 frequency_multiplier=2.0,
@@ -379,15 +379,90 @@ def generate_volcanic_boulder_heightmap(params: TerrainParameters) -> np.ndarray
 #     return heightmap
 
 # NEW Nov 24, 12:07pm ###
+# def generate_sand_ripples_heightmap(params: TerrainParameters) -> np.ndarray:
+#     """Generate sand ripples with GUARANTEED flat base using offset"""
+#     if params.seed is not None:
+#         random.seed(params.seed)
+#         np.random.seed(params.seed)
+    
+#     x_coords, y_coords = np.meshgrid(np.arange(params.map_size), np.arange(params.map_size))
+    
+#     # Ripple direction
+#     base_angle = random.uniform(0, np.pi)
+    
+#     direction_noise = PerlinNoise(octaves=1, seed=random.randint(0, 100000))
+#     direction_scale = 0.4
+    
+#     dir_samples = np.array([direction_noise([x/params.map_size * direction_scale, 
+#                                              y/params.map_size * direction_scale]) 
+#                            for x, y in zip(x_coords.flatten(), y_coords.flatten())])
+#     direction_field = dir_samples.reshape(params.map_size, params.map_size)
+    
+#     angle_variation = direction_field * 0.06
+#     local_angles = base_angle + angle_variation
+    
+#     # Rotate coordinates
+#     x_rot = x_coords * np.cos(local_angles) + y_coords * np.sin(local_angles)
+    
+#     # Ripple wavelength
+#     wavelength = params.map_size / (params.noise_scale * 1.0)
+    
+#     # Create sine wave
+#     ripple_wave = np.sin(2 * np.pi * x_rot / wavelength)
+    
+#     # Map to [0, 1]
+#     ripple_wave = (ripple_wave + 1.0) / 2.0
+    
+#     # Threshold: only keep peaks
+#     threshold = 0.6
+#     ripple_bumps = np.where(ripple_wave > threshold,
+#                            (ripple_wave - threshold) / (1.0 - threshold),
+#                            0.0)
+    
+#     # Smooth the bumps heavily
+#     ripple_bumps = ndimage.gaussian_filter(ripple_bumps, sigma=4.0)
+    
+#     # CRITICAL FIX: Start with a RAISED baseline (not zero!)
+#     BASE_HEIGHT = 0.5  # This is the flat seafloor level
+#     heightmap = np.full((params.map_size, params.map_size), BASE_HEIGHT)
+    
+#     # Add ripples ON TOP of the base (they can only increase height)
+#     RIPPLE_HEIGHT = 0.3  # Maximum additional height from ripples
+#     heightmap += ripple_bumps * RIPPLE_HEIGHT
+    
+#     # Add subtle large-scale undulation
+#     large_var = PerlinNoise(octaves=1, seed=random.randint(0, 100000))
+#     var_samples = np.array([large_var([x/params.map_size * 1.5, 
+#                                        y/params.map_size * 1.5]) 
+#                            for x, y in zip(x_coords.flatten(), y_coords.flatten())])
+#     variation = var_samples.reshape(params.map_size, params.map_size)
+    
+#     # Normalize variation to small positive values
+#     variation = (variation - variation.min()) / (variation.max() - variation.min())
+#     heightmap += variation * 0.03
+    
+#     # Add fine sand texture
+#     grain = np.random.normal(0, 0.001, heightmap.shape)
+#     grain = ndimage.gaussian_filter(grain, sigma=0.3)
+#     heightmap += grain
+    
+#     # Final smoothing
+#     heightmap = ndimage.gaussian_filter(heightmap, sigma=2.0)
+    
+#     # NO NORMALIZATION! Keep the absolute values
+#     # The base is at 0.5, ripples extend up to ~0.8
+#     # This preserves the flat regions at exactly 0.5
+    
+#     return heightmap
 def generate_sand_ripples_heightmap(params: TerrainParameters) -> np.ndarray:
-    """Generate sand ripples with GUARANTEED flat base using offset"""
+    """Generate sand ripples with natural discontinuities and pattern breaks"""
     if params.seed is not None:
         random.seed(params.seed)
         np.random.seed(params.seed)
     
     x_coords, y_coords = np.meshgrid(np.arange(params.map_size), np.arange(params.map_size))
     
-    # Ripple direction
+    # === STEP 1: Generate base ripple pattern (as before) ===
     base_angle = random.uniform(0, np.pi)
     
     direction_noise = PerlinNoise(octaves=1, seed=random.randint(0, 100000))
@@ -401,33 +476,111 @@ def generate_sand_ripples_heightmap(params: TerrainParameters) -> np.ndarray:
     angle_variation = direction_field * 0.06
     local_angles = base_angle + angle_variation
     
-    # Rotate coordinates
     x_rot = x_coords * np.cos(local_angles) + y_coords * np.sin(local_angles)
     
-    # Ripple wavelength
     wavelength = params.map_size / (params.noise_scale * 1.0)
     
-    # Create sine wave
     ripple_wave = np.sin(2 * np.pi * x_rot / wavelength)
-    
-    # Map to [0, 1]
     ripple_wave = (ripple_wave + 1.0) / 2.0
     
-    # Threshold: only keep peaks
     threshold = 0.6
     ripple_bumps = np.where(ripple_wave > threshold,
                            (ripple_wave - threshold) / (1.0 - threshold),
                            0.0)
     
-    # Smooth the bumps heavily
     ripple_bumps = ndimage.gaussian_filter(ripple_bumps, sigma=4.0)
     
-    # CRITICAL FIX: Start with a RAISED baseline (not zero!)
-    BASE_HEIGHT = 0.5  # This is the flat seafloor level
-    heightmap = np.full((params.map_size, params.map_size), BASE_HEIGHT)
+    # === STEP 2: CREATE DISCONTINUITIES ===
     
-    # Add ripples ON TOP of the base (they can only increase height)
-    RIPPLE_HEIGHT = 0.3  # Maximum additional height from ripples
+    # A. Generate "dead zones" - areas where ripples fade out
+    dead_zone_noise = PerlinNoise(octaves=2, seed=random.randint(0, 100000))
+    dead_zone_samples = np.array([dead_zone_noise([x/params.map_size * 3.0, 
+                                                   y/params.map_size * 3.0]) 
+                                 for x, y in zip(x_coords.flatten(), y_coords.flatten())])
+    dead_zone_mask = dead_zone_samples.reshape(params.map_size, params.map_size)
+    
+    # Normalize to [0, 1] and create patches where ripples are suppressed
+    dead_zone_mask = (dead_zone_mask - dead_zone_mask.min()) / (dead_zone_mask.max() - dead_zone_mask.min())
+    dead_zone_mask = np.where(dead_zone_mask < 0.3, dead_zone_mask / 0.3, 1.0)  # 30% of area has reduced ripples
+    
+    # Apply dead zones
+    ripple_bumps = ripple_bumps * dead_zone_mask
+    
+    # B. Create bifurcations - ripples split into two
+    num_bifurcations = random.randint(2, 5)
+    for _ in range(num_bifurcations):
+        # Random location and direction for bifurcation
+        bif_x = random.randint(int(params.map_size * 0.2), int(params.map_size * 0.8))
+        bif_y = random.randint(int(params.map_size * 0.2), int(params.map_size * 0.8))
+        bif_angle = random.uniform(0, 2 * np.pi)
+        bif_width = random.uniform(15, 40)  # pixels
+        
+        # Create a wedge-shaped mask for bifurcation
+        y_grid, x_grid = np.ogrid[:params.map_size, :params.map_size]
+        
+        # Distance from bifurcation point
+        dx = x_grid - bif_x
+        dy = y_grid - bif_y
+        
+        # Rotate to bifurcation angle
+        dx_rot = dx * np.cos(bif_angle) + dy * np.sin(bif_angle)
+        dy_rot = -dx * np.sin(bif_angle) + dy * np.cos(bif_angle)
+        
+        # Create wedge: affects area ahead of point
+        wedge_mask = np.where((dx_rot > 0) & (np.abs(dy_rot) < bif_width * (1 + dx_rot / 100.0)),
+                             0.3,  # Suppress ripples in wedge
+                             1.0)
+        
+        # Smooth the wedge edges
+        wedge_mask = ndimage.gaussian_filter(wedge_mask, sigma=10.0)
+        ripple_bumps = ripple_bumps * wedge_mask
+    
+    # C. Create pattern disruptions - abrupt breaks
+    num_breaks = random.randint(3, 7)
+    for _ in range(num_breaks):
+        break_x = random.randint(0, params.map_size - 1)
+        break_y = random.randint(0, params.map_size - 1)
+        break_size = random.uniform(20, 60)
+        break_strength = random.uniform(0.0, 0.4)  # How much to suppress
+        
+        # Create local disruption using Gaussian
+        y_grid, x_grid = np.ogrid[:params.map_size, :params.map_size]
+        distance = np.sqrt((x_grid - break_x)**2 + (y_grid - break_y)**2)
+        break_mask = 1.0 - (1.0 - break_strength) * np.exp(-(distance**2) / (2 * break_size**2))
+        
+        ripple_bumps = ripple_bumps * break_mask
+    
+    # D. Add secondary ripple train at different angle (creates Y-junctions)
+    if random.random() > 0.5:  # 50% chance
+        secondary_angle = base_angle + random.uniform(np.pi/6, np.pi/3)  # 30-60 degree offset
+        x_rot_2 = x_coords * np.cos(secondary_angle) + y_coords * np.sin(secondary_angle)
+        
+        wavelength_2 = wavelength * random.uniform(0.8, 1.2)
+        ripple_wave_2 = np.sin(2 * np.pi * x_rot_2 / wavelength_2)
+        ripple_wave_2 = (ripple_wave_2 + 1.0) / 2.0
+        
+        ripple_bumps_2 = np.where(ripple_wave_2 > threshold,
+                                  (ripple_wave_2 - threshold) / (1.0 - threshold),
+                                  0.0)
+        ripple_bumps_2 = ndimage.gaussian_filter(ripple_bumps_2, sigma=4.0)
+        
+        # Blend secondary ripples in only some regions
+        blend_noise = PerlinNoise(octaves=1, seed=random.randint(0, 100000))
+        blend_samples = np.array([blend_noise([x/params.map_size * 2.0, 
+                                              y/params.map_size * 2.0]) 
+                                 for x, y in zip(x_coords.flatten(), y_coords.flatten())])
+        blend_mask = blend_samples.reshape(params.map_size, params.map_size)
+        blend_mask = (blend_mask - blend_mask.min()) / (blend_mask.max() - blend_mask.min())
+        blend_mask = np.where(blend_mask > 0.6, (blend_mask - 0.6) / 0.4, 0.0)
+        
+        # Add secondary ripples where mask is active
+        ripple_bumps = ripple_bumps + ripple_bumps_2 * blend_mask * 0.5
+    
+    # === STEP 3: Assemble final heightmap ===
+    BASE_HEIGHT = 0.5
+    heightmap = np.full((params.map_size, params.map_size), BASE_HEIGHT)
+
+    RIPPLE_HEIGHT = 0.3
     heightmap += ripple_bumps * RIPPLE_HEIGHT
     
     # Add subtle large-scale undulation
@@ -436,8 +589,6 @@ def generate_sand_ripples_heightmap(params: TerrainParameters) -> np.ndarray:
                                        y/params.map_size * 1.5]) 
                            for x, y in zip(x_coords.flatten(), y_coords.flatten())])
     variation = var_samples.reshape(params.map_size, params.map_size)
-    
-    # Normalize variation to small positive values
     variation = (variation - variation.min()) / (variation.max() - variation.min())
     heightmap += variation * 0.03
     
@@ -449,11 +600,8 @@ def generate_sand_ripples_heightmap(params: TerrainParameters) -> np.ndarray:
     # Final smoothing
     heightmap = ndimage.gaussian_filter(heightmap, sigma=2.0)
     
-    # NO NORMALIZATION! Keep the absolute values
-    # The base is at 0.5, ripples extend up to ~0.8
-    # This preserves the flat regions at exactly 0.5
-    
     return heightmap
+
 
 def generate_terrain_by_preset(preset_name: str, params: TerrainParameters) -> np.ndarray:
     """Route to the correct generation function based on preset name"""
