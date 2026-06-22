@@ -5,7 +5,7 @@ Linkedin: www.linkedin.com/in/nsieh/
 Robotics Engineering Student | University of Michigan <br>
 -------------------------------------------------------------------------------------
 
-About Me
+About Me <br>
 I'm a rising junior in Robotics Engineering at the University of Michigan focused on 
 sim-to-real transfer, reinforcement learning, and legged locomotion control.
 
