@@ -9,8 +9,8 @@ About Me
 I'm a rising junior in Robotics Engineering at the University of Michigan focused on 
 sim-to-real transfer, reinforcement learning, and legged locomotion control.
 
-Current Focus: Humanoid fall-recovery and simulation stack for Michigan Wolverbots 
-(RoboCup) — rebuilding URDF, training RL policies in Isaac Lab, and engineering 
+Current Focus: Humanoid fall-recovery and simulation stack for Michigan Wolverbot Kickers 
+(RoboCup), rebuilding URDF, training RL policies in Isaac Lab, and engineering 
 sim-to-real transfer to physical hardware.
 
 -------------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ Humanoid Robotics | Michigan Wolverbots (RoboCup)
 University of Michigan | Jan 2026 – Present
 RL Subteam Lead working on humanoid locomotion and control.
 
-- Diagnosed and rebuilt broken humanoid URDF from scratch — re-authored all joint 
+- Diagnosed and rebuilt broken humanoid URDF from scratch, re-authored joint 
   links for stable simulation
 - Implementing fall-recovery RL policies in Isaac Lab across diverse orientations; 
   developing evaluation frameworks for velocity and postural stability
@@ -63,7 +63,7 @@ Embedded Systems & Biomedical Robotics | Extracorporeal Life Support Lab
 University of Michigan | Sept 2024 – April 2025
 
 - Implemented C++ embedded temperature control (thermistors + PID feedback) for 
-  wearable artificial lung prototypes — doubling fabricated membrane thickness and 
+  wearable artificial lung prototypes, doubling fabricated membrane thickness and 
   reducing defect rate
 
 Tech Stack: C++, Arduino, Embedded Systems, Sensor Integration
