@@ -5,12 +5,16 @@ Linkedin: www.linkedin.com/in/nsieh/
 Robotics Engineering Student | University of Michigan <br>
 -------------------------------------------------------------------------------------
 
-I'm a rising junior in Robotics Engineering at the University of Michigan focused on 
-sim-to-real transfer, reinforcement learning, and legged locomotion control.
+I'm a Robotics Engineering rising junior at University of Michigan, focused on the intersection of simulation, reinforcement learning, and physical robot behavior.
+ 
+Most of my work lives in the gap between simulation and reality. At UMich's Field Robotics Group, I spent a year building a GPU-accelerated side-scan sonar simulator in NVIDIA Isaac Sim, learning how to model physical phenomena in simulation and validate them against real-world data. That work led to a co-authored paper submitted to OCEANS 2026.
 
-Current Focus: Humanoid fall-recovery and simulation stack for Michigan Wolverbot Kickers 
-(RoboCup), rebuilding URDF, training RL policies in Isaac Lab, and engineering 
-sim-to-real transfer to physical hardware.
+Now I'm bringing those instincts to legged robotics. As RL Subteam Lead for Wolverbot Kickers, I'm working on humanoid fall-recovery policies in Isaac Lab and rebuilding our simulation stack, early-stage work toward competing at RoboCup.
+ 
+Core tools: Isaac Sim/Lab · CUDA · ROS2 · PyTorch · C++ · Python
+Recognition: CRA Outstanding Undergraduate Researcher Honorable Mention (2026, National)
+ 
+Open to Late Spring/Summer 2027 internships in robotics, legged locomotion, and control.
 
 -------------------------------------------------------------------------------------
 
