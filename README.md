@@ -73,6 +73,12 @@ Tech Stack: C++, Arduino, Embedded Systems, Sensor Integration
 
 -------------------------------------------------------------------------------------
 
+## Demos & Simulation Results
+
+[![Watch Demos on Google Drive](https://drive.google.com/drive/folders/1zUd_xFvGQYKB1XT0i2nqObynq0LG5asB?usp=drive_link)
+
+-------------------------------------------------------------------------------------
+
 Technical Skills
 Simulation & GPU: Isaac Sim/Lab, CUDA, PhysX, Warp, MuJoCo, Gazebo
 Planning & Control: RL, A*/BFS, FK/IK, PID, ROS/ROS2
