@@ -72,9 +72,6 @@ University of Michigan | Sept 2024 – April 2025
 Tech Stack: C++, Arduino, Embedded Systems, Sensor Integration
 
 -------------------------------------------------------------------------------------
-
-## Demos & Simulation Results
-
 [![Watch Demos on Google Drive](https://img.shields.org/badge/Watch_Demos-Google_Drive-4285F4?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/drive/folders/1zUd_xFvGQYKB1XT0i2nqObynq0LG5asB?usp=sharing)
 -------------------------------------------------------------------------------------
 
