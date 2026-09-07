@@ -1,5 +1,0 @@
-opencv-python
-joblib
-numpy
-picamera2
-scikit-learn
